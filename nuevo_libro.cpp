@@ -1,6 +1,7 @@
 #include "nuevo_libro.h"
 #include "ui_nuevo_libro.h"
 #include <QtSql>
+#include <QMessageBox>
 
 nuevo_libro::nuevo_libro(QWidget *parent) :
     QDialog(parent),
@@ -28,10 +29,10 @@ void nuevo_libro::on_botonFinalizar_clicked()
     db.setUserName("adrian");
     db.setPassword("12345");
 
-    QString isbn = "'" + ui->lineEditIsbn->text() + "'";
-    QString titulo = "'" + ui->lineEditTitulo->text() + "'";
-    QString autor = "'" + ui->lineEditAutor->text() + "'";
-    QString editorial = "'" + ui->lineEditEditorial->text() + "'";
+    QString isbn = ui->lineEditIsbn->text();
+    QString titulo = ui->lineEditTitulo->text();
+    QString autor = ui->lineEditAutor->text();
+    QString editorial = ui->lineEditEditorial->text();
     QString ejemplar = ui->lineEditEjemplar->text();
     QString anio = ui->lineEditAnio->text();
 
@@ -39,14 +40,28 @@ void nuevo_libro::on_botonFinalizar_clicked()
     {
         QSqlQuery query(db);
 
-        QString insert = "INSERT INTO libro(isbn, titulo, autor, editorial, ejemplar, anio_publicacion)"
-                "VALUES ( " + isbn + ", " + titulo + ", " + autor + ", " + editorial + ", " + ejemplar +
-                ", " + anio + " )";
+        query.prepare("INSERT INTO libro(isbn, titulo, autor, editorial, ejemplar, anio_publicacion)"
+                "VALUES (?, ?, ?, ?, ?, ?)");
 
-        qDebug() << insert;
-        query.exec(insert);
+        //qDebug() << insert;
+        query.bindValue(0, isbn);
+        query.bindValue(1, titulo);
+        query.bindValue(2, autor);
+        query.bindValue(3, editorial);
+        query.bindValue(4, ejemplar);
+        query.bindValue(5, anio);
 
-        db.commit(); // guarda los cambios en la base de datos
+        if(query.execBatch())
+        {
+            query.exec();
+            db.commit(); // guarda los cambios en la base de datos
+        }
+        else
+        {
+            QMessageBox msg;
+            msg.setText(query.lastError().text());
+            msg.exec();
+        }
 
         db.close();
     }

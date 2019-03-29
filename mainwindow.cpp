@@ -1,7 +1,17 @@
 #include "ui_mainwindow.h"
-#include "alta_libro.h"
 #include "mainwindow.h"
 #include <QtSql>
+#include <QSqlTableModel>
+
+enum {
+    CODIGO,
+    ISBN,
+    TITULO,
+    AUTOR,
+    EDITORIAL,
+    EJEMPLAR,
+    ANIO
+};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,21 +30,18 @@ void MainWindow::mostrarLibros()
 
     if(db.open())
     {
-        QSqlQuery query(db);
-
-        query.exec("SELECT * FROM libro");
-        uint numTuplas = query.size();
-        uint numColumnas = 7;
-        //query.clear();
-
-        ui->tableLibros->setColumnCount(numColumnas);
-        ui->tableLibros->setRowCount(numTuplas);
-        ui->tableLibros->verticalHeader()->setVisible(false);
-        //ui->tableLibros->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter);
-
-        for(uint i = 0; query.next(); i++)
-            for(uint j = 0; j < numColumnas; j++)
-                ui->tableLibros->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
+        QSqlTableModel *mModel = new QSqlTableModel(this, db);
+        mModel->setTable("libro");
+        mModel->select();
+        mModel->setHeaderData(CODIGO, Qt::Horizontal, tr("Código"));
+        mModel->setHeaderData(ISBN, Qt::Horizontal, tr("ISBN"));
+        mModel->setHeaderData(TITULO, Qt::Horizontal, tr("Título"));
+        mModel->setHeaderData(AUTOR, Qt::Horizontal, tr("Autor"));
+        mModel->setHeaderData(EDITORIAL, Qt::Horizontal, tr("Editorial"));
+        mModel->setHeaderData(EJEMPLAR, Qt::Horizontal, tr("Ejemplar"));
+        mModel->setHeaderData(ANIO, Qt::Horizontal, tr("Año de publicación"));
+        ui->tableViewLibros->setModel(mModel);
+        ui->tableViewLibros->verticalHeader()->setVisible(false);
 
         db.close();
     }
@@ -51,6 +58,9 @@ void MainWindow::on_pushButton_clicked()
 {
     nuevo_libro *ventana = new nuevo_libro(this);
     ventana->exec();
+
+    mostrarLibros();
+
     delete ventana;
 }
 
