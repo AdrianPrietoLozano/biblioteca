@@ -3,6 +3,10 @@
 
 #include <QDialog>
 #include "mainwindow.h"
+#include "permiso.h"
+
+#include <QString>
+#include <QMessageBox>
 
 namespace Ui {
 class Dialog;
@@ -21,9 +25,12 @@ private slots:
 
     void on_pushButtonCancelar_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::Dialog *ui;
     MainWindow *principal;
+    permiso *p;
 };
 
 #endif // DIALOG_H

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "nuevo_libro.h"
-
+#include <QtSql>
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +15,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void mostrarLibros();
+    void _query(QSqlQuery &query);
+    void llenarLista(QStringList &);
     ~MainWindow();
 
 private slots:

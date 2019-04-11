@@ -1,4 +1,4 @@
-#-------------------------------------------------
+xxxxxxxx    #-------------------------------------------------
 #
 # Project created by QtCreator 2019-03-01T12:18:29
 #
@@ -28,17 +28,23 @@ SOURCES += \
         main.cpp \
         dialog.cpp \
     mainwindow.cpp \
-    nuevo_libro.cpp
+    nuevo_libro.cpp \
+    registro.cpp \
+    permiso.cpp
 
 HEADERS += \
         dialog.h \
     mainwindow.h \
-    nuevo_libro.h
+    nuevo_libro.h \
+    registro.h \
+    permiso.h
 
 FORMS += \
         dialog.ui \
     mainwindow.ui \
-    nuevo_libro.ui
+    nuevo_libro.ui \
+    registro.ui \
+    permiso.ui
 
 RESOURCES += \
     imagenes.qrc
