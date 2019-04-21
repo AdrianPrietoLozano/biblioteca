@@ -6,19 +6,38 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>825</width>
-    <height>537</height>
+    <width>829</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Biblioteca Héctor Prieto</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="imagenes.qrc">
+    <normaloff>:/imagenes/libroBibliotecaSF.png</normaloff>:/imagenes/libroBibliotecaSF.png</iconset>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background: rgba(255,255,255,1);
+background: -moz-linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 1%, rgba(230,230,230,1) 1%, rgba(250,250,250,1) 96%, rgba(242,242,242,1) 100%);
+
+
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
+    <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/imagenes/fondoDes.png);
+background: none;
+</string>
+      </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -27,11 +46,109 @@
        <widget class="QLabel" name="label">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>0</y>
-          <width>301</width>
+          <x>110</x>
+          <y>180</y>
+          <width>251</width>
           <height>61</height>
          </rect>
+        </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>120</red>
+              <green>120</green>
+              <blue>120</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>25</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;
+background: none;</string>
+        </property>
+        <property name="text">
+         <string>&quot;Héctor Prieto&quot;</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>100</y>
+          <width>151</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>120</red>
+              <green>120</green>
+              <blue>120</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
         </property>
         <property name="font">
          <font>
@@ -40,27 +157,121 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;
+background: none;</string>
+        </property>
         <property name="text">
-         <string>Sea usted bienvenido a</string>
+         <string>BIBLIOTECA</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_4">
         <property name="geometry">
          <rect>
-          <x>140</x>
-          <y>60</y>
-          <width>541</width>
-          <height>371</height>
+          <x>560</x>
+          <y>40</y>
+          <width>121</width>
+          <height>51</height>
          </rect>
         </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>120</red>
+              <green>120</green>
+              <blue>120</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;
+background: none;</string>
+        </property>
         <property name="text">
-         <string/>
+         <string>Equipo #7</string>
         </property>
-        <property name="pixmap">
-         <pixmap resource="imagenes.qrc">:/imagenes/libroBiblioteca.png</pixmap>
+       </widget>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>30</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
         </property>
-        <property name="scaledContents">
-         <bool>true</bool>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;</string>
+        </property>
+        <property name="text">
+         <string>Préstamos</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>30</y>
+          <width>91</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;</string>
+        </property>
+        <property name="text">
+         <string>Modificar Libros</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_5">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>30</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;</string>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
         </property>
        </widget>
       </widget>
@@ -69,21 +280,74 @@
         <string>Libros</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="3">
-         <widget class="QLineEdit" name="line_Buscar"/>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="comboBox"/>
-        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_3">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background: none;</string>
+          </property>
           <property name="text">
-           <string>Bucar por:</string>
+           <string>Buscar por:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBox">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLineEdit" name="line_Buscar">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border-radius: 8px;
+background-color: none;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px solid rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Mostrar libros</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="pushButton">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px double rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Agregar libro</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0" colspan="4">
          <widget class="QTableWidget" name="tableLibros">
+          <property name="minimumSize">
+           <size>
+            <width>787</width>
+            <height>390</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);
+border-radius: 8px;</string>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <column>
            <property name="text">
             <string notr="true">Código</string>
@@ -94,6 +358,9 @@
              <weight>75</weight>
              <bold>true</bold>
             </font>
+           </property>
+           <property name="textAlignment">
+            <set>AlignCenter</set>
            </property>
            <property name="background">
             <color>
@@ -200,7 +467,7 @@
           </column>
           <column>
            <property name="text">
-            <string>Año de publicación</string>
+            <string>Año</string>
            </property>
            <property name="font">
             <font>
@@ -219,20 +486,6 @@
           </column>
          </widget>
         </item>
-        <item row="2" column="3">
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Agregar libro</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="text">
-           <string>Mostrar libros</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </widget>
@@ -244,7 +497,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>825</width>
+     <width>829</width>
      <height>21</height>
     </rect>
    </property>

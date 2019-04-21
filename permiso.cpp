@@ -23,8 +23,8 @@ void permiso::on_buttonBox_accepted()
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
     db.setHostName("localhost");
     db.setDatabaseName("biblioteca");
-    db.setUserName("postgres");
-    db.setPassword("213329346");
+    db.setUserName("adrian");
+    db.setPassword("12345");
 
     if(db.open())
     {

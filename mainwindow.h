@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "nuevo_libro.h"
+#include "modificar.h"
 #include <QtSql>
 
 namespace Ui {
@@ -13,7 +14,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow(const QString &codigoEmpleado, QWidget *parent = 0);
     void mostrarLibros();
     void _query(QSqlQuery &query);
     void llenarLista(QStringList &);
@@ -26,9 +27,17 @@ private slots:
 
     void on_tabWidget_tabBarClicked(int index);
 
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
-    //alta_libro *ventana;
+    QString codigoEmpleadoActual;
+
+    bool estaATiempo();
+    QTime horaCerrar();
+    QTime horaAbrir();
 };
 
 #endif // MAINWINDOW_H

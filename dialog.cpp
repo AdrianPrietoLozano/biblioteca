@@ -2,19 +2,25 @@
 #include "ui_dialog.h"
 #include "mainwindow.h"
 #include <QtSql>
+#include <QPixmap>
 
 #include <QString>
 #include <QMessageBox>
+
+#define CLAVE "equipo7"
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    principal = new MainWindow();
 
     ui->lineEditNombre->setPlaceholderText("Usuario");
     ui->lineEditPass->setPlaceholderText("Contraseña");
+
+    QPixmap image(":/imagenes/libroBibliotecaSF.png");
+    int w = ui->label_image->width(), h = ui->label_image->height();
+    ui->label_image->setPixmap(image.scaled(w, h, Qt::KeepAspectRatio));
 }
 
 Dialog::~Dialog()
@@ -24,10 +30,8 @@ Dialog::~Dialog()
 
 void Dialog::on_pushButtonAceptar_clicked()
 {
-    bool bandera = false;
-
-    QString usuario = ui -> lineEditNombre -> text();
-    QString contrasenia = ui -> lineEditPass -> text();
+    QString usuario = ui->lineEditNombre->text();
+    QString contrasenia = ui->lineEditPass->text();
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "coneccion");
     db.setHostName("localhost");
@@ -37,36 +41,32 @@ void Dialog::on_pushButtonAceptar_clicked()
 
     if(db.open())
     {
+        QString select = "SELECT codigo FROM empleado WHERE nombre_usuario=? "\
+                "AND PGP_SYM_DECRYPT(contrasenia, ?)=?";
+
         QSqlQuery query(db);
+        query.prepare(select);
+        query.bindValue(0, usuario);
+        query.bindValue(1, CLAVE);
+        query.bindValue(2, contrasenia);
 
-        /*
-        query.exec("SELECT * FROM usuarios");
+        qDebug() << query.lastQuery();
 
-        for(unsigned i = 0; query.next(); i++)
+        query.exec();
+
+        if(query.next())
         {
-            if(usuario == query.value(0) && contrasenia == query.value(1))
-            {
-                bandera = true;
-            }
-        }
+            principal = new MainWindow(query.value("codigo").toString());
 
-        if(bandera)
-        {
             this->hide();
             principal->show();
-        }*/
-
-        this->hide();
-        principal->show();
-
-        /*
+        }
         else
         {
             QMessageBox msg;
             msg.setText( "Usuario o contraseña incorrectos" );
             msg.exec();
         }
-        */
     }
 
 }
