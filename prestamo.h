@@ -37,16 +37,17 @@ private:
     bool esLibroValido;
 
     // libro
-    bool existeLibro(const QString &codigo);
     bool libroDisponible(const QString &codigo);
-    bool sePuedePrestar(const QString &codigo);
-    void completarInfoLibro(const QString &codigo);
+    bool sePuedePrestar(const int ejemplar);
+    void completarInfoLibro(const QString &titulo, const QString &autor,
+                            const QString &ejemplar, const QString &isbn);
     void cambiarInfoLibro(const QString &mensaje, bool debeLimpiar);
+    QMap<QString, QString> atributosLibro(const QString &codigo);
 
     // cliente
-    bool existeCliente(const QString &codigo);
+    QMap<QString, QString> atributosCliente(const QString &codigo);
     bool puedeHacerMasPrestamos(const QString &codigo);
-    void completarInfoCliente(const QString &codigo);
+    void completarInfoCliente(const QString &nombre, const QString &departamento, const QString &tipo);
     void cambiarInfoCliente(const QString &mensaje, bool debeLimpiar);
 
     void mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTime &horaEntrega);

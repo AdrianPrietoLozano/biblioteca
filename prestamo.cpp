@@ -31,20 +31,6 @@ void Prestamo::on_botonCancelar_clicked()
     close();
 }
 
-bool Prestamo::existeLibro(const QString &codigo)
-{
-    QSqlQuery query(db);
-
-    if(db.open())
-    {
-        QString select = "SELECT codigo FROM libro WHERE codigo=" + codigo;
-        query.exec(select);
-
-        return query.next();
-    }
-
-    return false;
-}
 
 
 bool Prestamo::libroDisponible(const QString &codigo)
@@ -62,48 +48,24 @@ bool Prestamo::libroDisponible(const QString &codigo)
 }
 
 
-bool Prestamo::sePuedePrestar(const QString &codigo)
+bool Prestamo::sePuedePrestar(const int ejemplar)
 {
-    QSqlQuery query(db);
+    int dia = QDate::currentDate().dayOfWeek();
 
-    if(db.open())
-    {
-        QString select = "SELECT ejemplar FROM libro WHERE codigo=" + codigo;
-        query.exec(select);
+    if(ejemplar == 1 && dia != 5) // es primer ejemplar y es viernes
+        return false;
 
-        if(query.next())
-        {
-            int dia = QDate::currentDate().dayOfWeek();
-            int ejemplar = query.value("ejemplar").toInt();
-
-            if(ejemplar == 1 && dia == 5) // es primer ejemplar y es viernes
-                return true;
-            else if(ejemplar == 1 && dia != 5) // es primer ejemplar y no es viernes
-                return false;
-
-            return true; // es cualquier otro ejemplar
-        }
-    }
-    return false;
+    return true;
 }
 
 
-void Prestamo::completarInfoLibro(const QString &codigo)
+void Prestamo::completarInfoLibro(const QString &titulo, const QString &autor,
+                                  const QString &ejemplar, const QString &isbn)
 {
-    QSqlQuery query(db);
-
-    if(db.open())
-    {
-        QString select = "SELECT titulo, autor, ejemplar, isbn FROM libro WHERE codigo=" + codigo;
-        query.exec(select);
-        if(query.next())
-        {
-            ui->lineEditTitulo->setText(query.value("titulo").toString());
-            ui->lineEditAutor->setText(query.value("autor").toString());
-            ui->lineEditEjemplar->setText(query.value("ejemplar").toString());
-            ui->lineEditIsbn->setText(query.value("isbn").toString());
-        }
-    }
+    ui->lineEditTitulo->setText(titulo);
+    ui->lineEditAutor->setText(autor);
+    ui->lineEditEjemplar->setText(ejemplar);
+    ui->lineEditIsbn->setText(isbn);
 }
 
 void Prestamo::cambiarInfoLibro(const QString &mensaje, bool debeLimpiar)
@@ -120,21 +82,48 @@ void Prestamo::cambiarInfoLibro(const QString &mensaje, bool debeLimpiar)
     ui->botonAceptar->setEnabled(false);
 }
 
-
-bool Prestamo::existeCliente(const QString &codigo)
+QMap<QString, QString> Prestamo::atributosLibro(const QString &codigo)
 {
     QSqlQuery query(db);
+    QMap<QString, QString> valores;
 
     if(db.open())
     {
-        QString select = "SELECT codigo FROM usuario WHERE codigo=?";
-        query.prepare(select);
-        query.bindValue(0, codigo);
-        query.exec();
+        QString select = "SELECT titulo, autor, ejemplar, isbn FROM libro WHERE codigo="+codigo;
+        query.exec(select);
 
-        return query.next();
+        if(query.next())
+        {
+            valores["titulo"] = query.value("titulo").toString();
+            valores["autor"] = query.value("autor").toString();
+            valores["ejemplar"] = query.value("ejemplar").toString();
+            valores["isbn"] = query.value("isbn").toString();
+        }
     }
-    return false;
+
+    return valores;
+}
+
+
+QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
+{
+    QSqlQuery query(db);
+    QMap<QString, QString> valores;
+
+    if(db.open())
+    {
+        QString select = "SELECT nombre, departamento, tipo FROM usuario WHERE codigo="+codigo;
+        query.exec(select);
+
+        if(query.next())
+        {
+            valores["nombre"] = query.value("nombre").toString();
+            valores["departamento"] = query.value("departamento").toString();
+            valores["tipo"] = (query.value("tipo").toString() == "E" ? "Estudiante" : "Profesor");
+        }
+    }
+
+    return valores;
 }
 
 
@@ -161,30 +150,12 @@ bool Prestamo::puedeHacerMasPrestamos(const QString &codigo)
 }
 
 
-void Prestamo::completarInfoCliente(const QString &codigo)
+void Prestamo::completarInfoCliente(const QString &nombre, const QString &departamento,
+                                    const QString &tipo)
 {
-    QSqlQuery query(db);
-
-    if(db.open())
-    {
-        QString select = "SELECT nombre, departamento, tipo FROM usuario WHERE codigo=" + codigo;
-        query.exec(select);
-
-        if(query.next())
-        {
-            ui->lineEditNombre->setText(query.value("nombre").toString());
-            ui->lineEditDpto->setText(query.value("departamento").toString());
-
-            QString tipoCliente = (query.value("tipo").toString() == "E" ? "Estudiante" : "Profesor");
-            ui->lineEditTipo->setText(tipoCliente);
-
-            ui->labelCliente->clear();
-        }
-    }
-
-    // si la info. del libro es correcta se activa el botón Aceptar
-    bool activarBoton = (esLibroValido ? true : false);
-    ui->botonAceptar->setEnabled(activarBoton);
+    ui->lineEditNombre->setText(nombre);
+    ui->lineEditDpto->setText(departamento);
+    ui->lineEditTipo->setText(tipo);
 }
 
 
@@ -205,11 +176,14 @@ void Prestamo::cambiarInfoCliente(const QString &mensaje, bool debeLimpiar)
 void Prestamo::on_lineEditCodigoLibro_textEdited(const QString &arg1)
 {
     esLibroValido = false;
-    if(existeLibro(arg1))
+    QMap<QString, QString> atributos = atributosLibro(arg1);
+
+    if(atributos.size() > 0)
     {
-        completarInfoLibro(arg1);
+        completarInfoLibro(atributos["titulo"], atributos["autor"], atributos["ejemplar"],
+                atributos["isbn"]);
         if(libroDisponible(arg1))
-            if(sePuedePrestar(arg1))
+            if(sePuedePrestar(atributos["ejemplar"].toInt()))
             {
                 esLibroValido = true;
                 ui->labelLibro->clear();
@@ -231,9 +205,11 @@ void Prestamo::on_lineEditCodigoLibro_textEdited(const QString &arg1)
 void Prestamo::on_lineEditCodigoCliente_textEdited(const QString &arg1)
 {
     esClienteValido = false;
-    if(existeCliente(arg1))
+    QMap<QString, QString> atributos = atributosCliente(arg1);
+
+    if(atributos.size() > 0)
     {
-       completarInfoCliente(arg1);
+       completarInfoCliente(atributos["nombre"], atributos["departamento"], atributos["tipo"]);
        if(puedeHacerMasPrestamos(arg1))
        {
            esClienteValido = true;
@@ -290,7 +266,8 @@ void Prestamo::mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTim
 
 void Prestamo::on_botonAceptar_clicked()
 {
-    if(QTime::currentTime() <= horaDeCerrar)
+    //QTime::currentTime() <= horaDeCerrar
+    if(true)
     {
         QString codigoLibro = ui->lineEditCodigoLibro->text();
         QString codigoCliente = ui->lineEditCodigoCliente->text();
