@@ -2,6 +2,7 @@
 #include "alta_libro.h"
 #include "mainwindow.h"
 #include "prestamo.h"
+#include "devolucion.h"
 #include <QMessageBox>
 
 MainWindow::MainWindow(const QString &codigoEmpleado, QWidget *parent) :
@@ -139,7 +140,7 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    if(true)
+    if(estaATiempo())
     {
         Prestamo *prestamo = new Prestamo(this, codigoEmpleadoActual);
         prestamo->exec();
@@ -182,4 +183,22 @@ QTime MainWindow::horaCerrar()
 QTime MainWindow::horaAbrir()
 {
     return QTime(8, 0); // todos los días habre a las 8am
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    if(estaATiempo())
+    {
+        Devolucion *devolucion = new Devolucion(this);
+        devolucion->exec();
+
+        delete devolucion;
+    }
+    else
+    {
+        QMessageBox msg(this);
+        msg.setText("Fuera de tiempo para devoluciones.");
+        msg.setWindowTitle("Fuera de tiempo");
+        msg.exec();
+    }
 }

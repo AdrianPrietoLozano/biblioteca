@@ -33,7 +33,9 @@ SOURCES += \
     permiso.cpp \
     modificar.cpp \
     prestamo.cpp \
-    infoprestamo.cpp
+    infoprestamo.cpp \
+    devolucion.cpp \
+    infodevolucion.cpp
 
 HEADERS += \
         dialog.h \
@@ -43,7 +45,9 @@ HEADERS += \
     permiso.h \
     modificar.h \
     prestamo.h \
-    infoprestamo.h
+    infoprestamo.h \
+    devolucion.h \
+    infodevolucion.h
 
 FORMS += \
         dialog.ui \
@@ -53,7 +57,9 @@ FORMS += \
     permiso.ui \
     modificar.ui \
     prestamo.ui \
-    infoprestamo.ui
+    infoprestamo.ui \
+    devolucion.ui \
+    infodevolucion.ui
 
 RESOURCES += \
     imagenes.qrc

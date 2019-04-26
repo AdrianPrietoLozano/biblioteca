@@ -31,22 +31,30 @@ void Prestamo::on_botonCancelar_clicked()
     close();
 }
 
-
-
-bool Prestamo::libroDisponible(const QString &codigo)
+QMap<QString, QString> Prestamo::atributosLibro(const QString &codigo)
 {
     QSqlQuery query(db);
+    QMap<QString, QString> valores;
 
     if(db.open())
     {
-        QString select = "SELECT codigo FROM prestamo WHERE codigo_libro=" + codigo;
+        QString select = "SELECT titulo, autor, ejemplar, isbn, COUNT(prestamo.codigo_libro) AS cantidad_prestamos "\
+                "FROM libro LEFT JOIN prestamo ON libro.codigo=prestamo.codigo_libro "\
+                "WHERE libro.codigo=" + codigo + " GROUP BY libro.codigo";
         query.exec(select);
 
-        return query.size() == 0;
+        if(query.next())
+        {
+            valores["titulo"] = query.value("titulo").toString();
+            valores["autor"] = query.value("autor").toString();
+            valores["ejemplar"] = query.value("ejemplar").toString();
+            valores["isbn"] = query.value("isbn").toString();
+            valores["cantidad_prestamos"] = query.value("cantidad_prestamos").toString();
+        }
     }
-    return false;
-}
 
+    return valores;
+}
 
 bool Prestamo::sePuedePrestar(const int ejemplar)
 {
@@ -82,27 +90,6 @@ void Prestamo::cambiarInfoLibro(const QString &mensaje, bool debeLimpiar)
     ui->botonAceptar->setEnabled(false);
 }
 
-QMap<QString, QString> Prestamo::atributosLibro(const QString &codigo)
-{
-    QSqlQuery query(db);
-    QMap<QString, QString> valores;
-
-    if(db.open())
-    {
-        QString select = "SELECT titulo, autor, ejemplar, isbn FROM libro WHERE codigo="+codigo;
-        query.exec(select);
-
-        if(query.next())
-        {
-            valores["titulo"] = query.value("titulo").toString();
-            valores["autor"] = query.value("autor").toString();
-            valores["ejemplar"] = query.value("ejemplar").toString();
-            valores["isbn"] = query.value("isbn").toString();
-        }
-    }
-
-    return valores;
-}
 
 
 QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
@@ -112,7 +99,9 @@ QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
 
     if(db.open())
     {
-        QString select = "SELECT nombre, departamento, tipo FROM usuario WHERE codigo="+codigo;
+        QString select = "SELECT nombre, departamento, tipo, COUNT(prestamo.codigo_cliente) AS cantidad_prestamos "\
+                "FROM usuario LEFT JOIN prestamo ON usuario.codigo=prestamo.codigo_cliente "\
+                "WHERE usuario.codigo=" + codigo + " GROUP BY usuario.codigo";
         query.exec(select);
 
         if(query.next())
@@ -120,6 +109,7 @@ QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
             valores["nombre"] = query.value("nombre").toString();
             valores["departamento"] = query.value("departamento").toString();
             valores["tipo"] = (query.value("tipo").toString() == "E" ? "Estudiante" : "Profesor");
+            valores["cantidad_prestamos"] = query.value("cantidad_prestamos").toString();
         }
     }
 
@@ -127,26 +117,11 @@ QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
 }
 
 
-bool Prestamo::puedeHacerMasPrestamos(const QString &codigo)
+bool Prestamo::puedeHacerMasPrestamos(const QString &tipoUsuario, const int cantidad_prestamos)
 {
-    QSqlQuery query(db);
+    int numMaxPrestamos = (tipoUsuario == "Estudiante" ? MAX_PRESTAMOS_ESTUDIANTE : MAX_PRESTAMOS_MAESTRO);
 
-    if(db.open())
-    {
-        // regresa el tipo de usuario y la cantidad de préstamos que ha solicitado
-        QString select = "SELECT usuario.tipo AS tipo, count(prestamo.codigo) AS num_prestamos "\
-                "FROM usuario, prestamo WHERE usuario.codigo=? AND prestamo.codigo_cliente=? GROUP BY usuario.tipo";
-        query.prepare(select);
-        query.bindValue(0, codigo);
-        query.bindValue(1, codigo);
-        query.exec();
-        query.next();
-
-        int numMaxPrestamos = (query.value("tipo").toString() == "E" ? MAX_PRESTAMOS_ESTUDIANTE : MAX_PRESTAMOS_MAESTRO);
-
-        return query.value("num_prestamos").toInt() < numMaxPrestamos;
-    }
-    return false;
+    return cantidad_prestamos < numMaxPrestamos;
 }
 
 
@@ -181,8 +156,8 @@ void Prestamo::on_lineEditCodigoLibro_textEdited(const QString &arg1)
     if(atributos.size() > 0)
     {
         completarInfoLibro(atributos["titulo"], atributos["autor"], atributos["ejemplar"],
-                atributos["isbn"]);
-        if(libroDisponible(arg1))
+                           atributos["isbn"]);
+        if(atributos["cantidad_prestamos"].toInt() == 0) // aún no se presta (el libro esta disponible)
             if(sePuedePrestar(atributos["ejemplar"].toInt()))
             {
                 esLibroValido = true;
@@ -210,7 +185,7 @@ void Prestamo::on_lineEditCodigoCliente_textEdited(const QString &arg1)
     if(atributos.size() > 0)
     {
        completarInfoCliente(atributos["nombre"], atributos["departamento"], atributos["tipo"]);
-       if(puedeHacerMasPrestamos(arg1))
+       if(puedeHacerMasPrestamos(atributos["tipo"], atributos["cantidad_prestamos"].toInt()))
        {
            esClienteValido = true;
            ui->labelCliente->clear();
@@ -266,8 +241,7 @@ void Prestamo::mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTim
 
 void Prestamo::on_botonAceptar_clicked()
 {
-    //QTime::currentTime() <= horaDeCerrar
-    if(true)
+    if(QTime::currentTime() <= horaDeCerrar)
     {
         QString codigoLibro = ui->lineEditCodigoLibro->text();
         QString codigoCliente = ui->lineEditCodigoCliente->text();
@@ -283,7 +257,7 @@ void Prestamo::on_botonAceptar_clicked()
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_ESTUDIANTE);
             horaEntrega.setTime(horaDeCerrar);
         }
-        else if(tipoUsuario == "Maestro"){
+        else if(tipoUsuario == "Profesor"){
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_MAESTRO);
             horaEntrega.setTime(horaDeCerrar);
         }
@@ -303,6 +277,3 @@ void Prestamo::on_botonAceptar_clicked()
 
     close();
 }
-
-
-//

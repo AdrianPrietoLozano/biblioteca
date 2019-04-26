@@ -1,58 +1,50 @@
-#ifndef PRESTAMO_H
-#define PRESTAMO_H
+#ifndef DEVOLUCION_H
+#define DEVOLUCION_H
 
 #include <QDialog>
-#include <QTime>
 #include <QtSql>
 
-#include "infoprestamo.h"
-
 namespace Ui {
-class Prestamo;
+class Devolucion;
 }
 
-class Prestamo : public QDialog
+class Devolucion : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Prestamo(QWidget *parent, const QString &codigoEmpleado);
-    ~Prestamo();
+    explicit Devolucion(QWidget *parent = 0);
+    ~Devolucion();
 
 private slots:
     void on_botonCancelar_clicked();
-
     void on_lineEditCodigoLibro_textEdited(const QString &arg1);
-
     void on_lineEditCodigoCliente_textEdited(const QString &arg1);
 
     void on_botonAceptar_clicked();
 
 private:
-    Ui::Prestamo *ui;
-    QTime horaDeCerrar = getHoraCerrar();
-    QString codigoEmpleado;
+    Ui::Devolucion *ui;
     QSqlDatabase db;
-    bool esClienteValido;
-    bool esLibroValido;
+    QTime horaDeCerrar = getHoraCerrar();
 
-    // libro
-    bool sePuedePrestar(const int ejemplar);
+    // Libro
+    QMap<QString, QString> atributosLibro(const QString &codigo);
     void completarInfoLibro(const QString &titulo, const QString &autor,
                             const QString &ejemplar, const QString &isbn);
     void cambiarInfoLibro(const QString &mensaje, bool debeLimpiar);
-    QMap<QString, QString> atributosLibro(const QString &codigo);
 
-    // cliente
+
+    // Cliente
     QMap<QString, QString> atributosCliente(const QString &codigo);
-    bool puedeHacerMasPrestamos(const QString &tipoUsuario, const int cantidad_prestamos);
     void completarInfoCliente(const QString &nombre, const QString &departamento, const QString &tipo);
     void cambiarInfoCliente(const QString &mensaje, bool debeLimpiar);
+    bool clienteSolicitoLibro(const QString &codigoCliente, const QString &codigoLibro);
+    void comprobarDevolucion();
 
-    void mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTime &horaEntrega);
-    bool insertarRegistroPrestamo(const QString &codigoLibro, const QString &codigoCliente,
-                                  const QString &codigoEmpleado, const QDateTime horaPrestamo,
-                                  const QDateTime horaEntrega);
+
+    QString calcularRetraso(const int ejemplar, const QDateTime fecha_entrega);
+    float calcularPenalizacion(const int ejemplar, const QDateTime fecha_entrega);
 
     QTime getHoraCerrar()
     {
@@ -63,4 +55,4 @@ private:
     }
 };
 
-#endif // PRESTAMO_H
+#endif // DEVOLUCION_H

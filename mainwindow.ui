@@ -271,7 +271,7 @@ background: none;</string>
          <string notr="true">border-image: none;</string>
         </property>
         <property name="text">
-         <string>PushButton</string>
+         <string>Devoluciones</string>
         </property>
        </widget>
       </widget>
