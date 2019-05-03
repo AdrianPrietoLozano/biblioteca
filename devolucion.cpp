@@ -202,7 +202,7 @@ void Devolucion::comprobarDevolucion()
         }
         else
         {
-            cambiarInfoCliente("El cliente no solicito el libro", false);
+            cambiarInfoCliente("El cliente no solicitó el libro", false);
             ui->botonAceptar->setEnabled(false);
         }
     }
@@ -264,6 +264,27 @@ float Devolucion::calcularPenalizacion(const int ejemplar, const QDateTime fecha
     return penalizacion;
 }
 
+bool Devolucion::eliminarPrestamo(const QString &codigoLibro, const QString &codigoCliente)
+{
+    QSqlQuery query(db);
+
+    if(db.open())
+    {
+        QString eliminar = "DELETE FROM prestamo WHERE codigo_libro=? AND codigo_cliente=?";
+        query.prepare(eliminar);
+        query.bindValue(0, codigoLibro);
+        query.bindValue(1, codigoCliente);
+
+        if(query.exec())
+        {
+            db.commit();
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 void Devolucion::on_lineEditCodigoCliente_textEdited(const QString &arg1)
 {
@@ -287,6 +308,8 @@ void Devolucion::on_botonAceptar_clicked()
 {
     float penalizacion = 0.0;
     QString retraso = "Sin retraso";
+    QString codigoLibro = ui->lineEditCodigoLibro->text();
+    QString codigoCliente = ui->lineEditCodigoCliente->text();
 
     if(QTime::currentTime() <= horaDeCerrar)
     {
@@ -296,13 +319,13 @@ void Devolucion::on_botonAceptar_clicked()
         {
             QString select = "SELECT ejemplar, fecha_entrega FROM prestamo, libro WHERE codigo_libro=? AND libro.codigo=?";
             query.prepare(select);
-            query.bindValue(0, ui->lineEditCodigoLibro->text());
-            query.bindValue(1, ui->lineEditCodigoLibro->text());
+            query.bindValue(0, codigoLibro);
+            query.bindValue(1, codigoLibro);
             query.exec();
 
-            if(query.next())
+            if(query.next()) // si existe el prestamo
             {
-                if(QDateTime::currentDateTime() > query.value("fecha_entrega").toDateTime()) // se entrega con retraso
+                if(QDateTime::currentDateTime() > query.value("fecha_entrega").toDateTime()) // si se entrega con retraso
                 {
                     penalizacion = calcularPenalizacion(query.value("ejemplar").toInt(),
                                                         query.value("fecha_entrega").toDateTime());
@@ -312,6 +335,8 @@ void Devolucion::on_botonAceptar_clicked()
                     // FALTA GENERAR RECIBO
                 }
 
+                eliminarPrestamo(codigoLibro, codigoCliente);
+
                 InfoDevolucion *infoDevolucion = new InfoDevolucion(this, ui->lineEditTitulo->text(),
                                                                     ui->lineEditNombre->text(),
                                                                     query.value("fecha_entrega").toDateTime(),
@@ -319,9 +344,15 @@ void Devolucion::on_botonAceptar_clicked()
                 infoDevolucion->exec();
                 delete infoDevolucion;
 
-                // FALTA ELIMINAR EL REGISTRO DE LA TABLA PRÉSTAMO
-
             }
+            else
+            {
+                QMessageBox msg(this);
+                msg.setText("No se encontró el préstamo");
+                msg.setWindowTitle("Error");
+                msg.exec();
+            }
+
         }
 
     }

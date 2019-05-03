@@ -187,7 +187,8 @@ QTime MainWindow::horaAbrir()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    if(estaATiempo())
+    //estaATiempo()
+    if(true)
     {
         Devolucion *devolucion = new Devolucion(this);
         devolucion->exec();

@@ -6,7 +6,7 @@
 #include <QDateTime>
 
 // segundos en 3 horas
-#define SEGUNDOS_PRESTAR_PRIMER_EJEMPLAR 10800
+#define DIAS_PRESTAR_PRIMER_EJEMPLAR 3
 #define DIAS_PRESTAMO_ESTUDIANTE 7
 #define DIAS_PRESTAMO_MAESTRO 15
 #define MAX_PRESTAMOS_ESTUDIANTE 5
@@ -153,12 +153,12 @@ void Prestamo::on_lineEditCodigoLibro_textEdited(const QString &arg1)
     esLibroValido = false;
     QMap<QString, QString> atributos = atributosLibro(arg1);
 
-    if(atributos.size() > 0)
+    if(atributos.size() > 0) // existe el libro
     {
         completarInfoLibro(atributos["titulo"], atributos["autor"], atributos["ejemplar"],
                            atributos["isbn"]);
         if(atributos["cantidad_prestamos"].toInt() == 0) // aún no se presta (el libro esta disponible)
-            if(sePuedePrestar(atributos["ejemplar"].toInt()))
+            if(sePuedePrestar(atributos["ejemplar"].toInt())) // si es día válido para prestar el libro
             {
                 esLibroValido = true;
                 ui->labelLibro->clear();
@@ -182,7 +182,7 @@ void Prestamo::on_lineEditCodigoCliente_textEdited(const QString &arg1)
     esClienteValido = false;
     QMap<QString, QString> atributos = atributosCliente(arg1);
 
-    if(atributos.size() > 0)
+    if(atributos.size() > 0) // si existe el cliente
     {
        completarInfoCliente(atributos["nombre"], atributos["departamento"], atributos["tipo"]);
        if(puedeHacerMasPrestamos(atributos["tipo"], atributos["cantidad_prestamos"].toInt()))
@@ -251,8 +251,8 @@ void Prestamo::on_botonAceptar_clicked()
         QDateTime horaPrestamo = QDateTime::currentDateTime();
         QDateTime horaEntrega;
 
-        if(ejemplar == 1) // es primer ejemplar, solo se presta 3 horas
-            horaEntrega = horaPrestamo.addSecs(SEGUNDOS_PRESTAR_PRIMER_EJEMPLAR);
+        if(ejemplar == 1) // es primer ejemplar, solo se presta 3 dias
+            horaEntrega = horaPrestamo.addDays(DIAS_PRESTAR_PRIMER_EJEMPLAR);
         else if(tipoUsuario == "Estudiante"){
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_ESTUDIANTE);
             horaEntrega.setTime(horaDeCerrar);
