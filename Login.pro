@@ -35,7 +35,8 @@ SOURCES += \
     prestamo.cpp \
     infoprestamo.cpp \
     devolucion.cpp \
-    infodevolucion.cpp
+    infodevolucion.cpp \
+    altaempleado.cpp
 
 HEADERS += \
         dialog.h \
@@ -47,7 +48,8 @@ HEADERS += \
     prestamo.h \
     infoprestamo.h \
     devolucion.h \
-    infodevolucion.h
+    infodevolucion.h \
+    altaempleado.h
 
 FORMS += \
         dialog.ui \
@@ -59,7 +61,8 @@ FORMS += \
     prestamo.ui \
     infoprestamo.ui \
     devolucion.ui \
-    infodevolucion.ui
+    infodevolucion.ui \
+    altaempleado.ui
 
 RESOURCES += \
     imagenes.qrc

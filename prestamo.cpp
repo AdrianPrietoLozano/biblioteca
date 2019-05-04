@@ -268,12 +268,7 @@ void Prestamo::on_botonAceptar_clicked()
             qDebug() << "Error";
     }
     else
-    {
-        QMessageBox msg(this);
-        msg.setText("No es posible realizar más préstamos");
-        msg.setWindowTitle("Fuera de tiempo");
-        msg.exec();
-    }
+        QMessageBox::information(this, "Fuera de tiempo", "No es posible realizar más préstamos");
 
     close();
 }

@@ -5,6 +5,7 @@
 #include "nuevo_libro.h"
 #include "modificar.h"
 #include <QtSql>
+#include <QTableWidget>
 
 namespace Ui {
 class MainWindow;
@@ -14,10 +15,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(const QString &codigoEmpleado, QWidget *parent = 0);
-    void mostrarLibros();
-    void _query(QSqlQuery &query);
-    void llenarLista(QStringList &);
+    MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent = 0);
     ~MainWindow();
 
 private slots:
@@ -33,6 +31,12 @@ private slots:
 
     void on_pushButton_5_clicked();
 
+    void on_botonCerrarSesion_clicked();
+
+    void on_botonMostrarEmpleados_clicked();
+
+    void on_botonAgregarEmpleado_clicked();
+
 private:
     Ui::MainWindow *ui;
     QString codigoEmpleadoActual;
@@ -40,6 +44,12 @@ private:
     bool estaATiempo();
     QTime horaCerrar();
     QTime horaAbrir();
+    void consultaLibros(QSqlQuery &query);
+    void consultaEmpleados(QSqlQuery &query);
+    void _query(QSqlQuery &query);
+    void llenarLista(QStringList &);
+    void llenarTabla(QTableWidget *tabla, QComboBox *combo, const QString &datoABuscar,
+                                 const QString &seleccion, const uint numColumnas);
 };
 
 #endif // MAINWINDOW_H

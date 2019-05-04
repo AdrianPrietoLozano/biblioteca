@@ -2,6 +2,7 @@
 #define NUEVO_LIBRO_H
 
 #include <QDialog>
+#include <QtSql>
 
 namespace Ui {
 class nuevo_libro;
@@ -23,6 +24,9 @@ private slots:
 
 private:
     Ui::nuevo_libro *ui;
+    QSqlDatabase db;
+
+    bool insertarLibro();
 };
 
 #endif // NUEVO_LIBRO_H

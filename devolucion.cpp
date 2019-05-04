@@ -336,33 +336,19 @@ void Devolucion::on_botonAceptar_clicked()
                 }
 
                 eliminarPrestamo(codigoLibro, codigoCliente);
-
                 InfoDevolucion *infoDevolucion = new InfoDevolucion(this, ui->lineEditTitulo->text(),
                                                                     ui->lineEditNombre->text(),
                                                                     query.value("fecha_entrega").toDateTime(),
                                                                     retraso, penalizacion);
                 infoDevolucion->exec();
                 delete infoDevolucion;
-
             }
             else
-            {
-                QMessageBox msg(this);
-                msg.setText("No se encontró el préstamo");
-                msg.setWindowTitle("Error");
-                msg.exec();
-            }
-
+                QMessageBox::critical(this, "Error", "No se encontró el préstamo");
         }
-
     }
     else
-    {
-        QMessageBox msg(this);
-        msg.setText("No es posible realizar devoluciones");
-        msg.setWindowTitle("Fuera de tiempo");
-        msg.exec();
-    }
+        QMessageBox::information(this, "Fuera de tiempo", "No es posible realizar devoluciones");
 
     close();
 }

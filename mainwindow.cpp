@@ -3,9 +3,11 @@
 #include "mainwindow.h"
 #include "prestamo.h"
 #include "devolucion.h"
+#include "dialog.h"
+#include "altaempleado.h"
 #include <QMessageBox>
 
-MainWindow::MainWindow(const QString &codigoEmpleado, QWidget *parent) :
+MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent) :
     codigoEmpleadoActual(codigoEmpleado),
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -20,13 +22,19 @@ MainWindow::MainWindow(const QString &codigoEmpleado, QWidget *parent) :
 
     ui->comboBox->addItems(a);
 
-    qDebug() << "Empleado actual = " << codigoEmpleadoActual;
+    QStringList lista = {"Código", "Nombre", "Edad", "Salario", "Sexo", "Nombre de usuario"};
+    ui->comboBoxEmpleados->addItems(lista);
 
-//    ui->tableLibros->setDisabled(true);
-//    ui->tableLibros->horizontalHeader()->setStretchLastSection(true);
+    if(esAdministrador)
+        ui->tabEmpleados->setEnabled(true);
+    else
+        ui->tabEmpleados->setEnabled(false);
+
+    qDebug() << esAdministrador;
 }
 
-void MainWindow::mostrarLibros()
+void MainWindow::llenarTabla(QTableWidget *tabla, QComboBox *combo, const QString &datoABuscar,
+                             const QString &seleccion, const uint numColumnas)
 {
     QSqlDatabase db = QSqlDatabase::database("coneccion");
 
@@ -34,66 +42,113 @@ void MainWindow::mostrarLibros()
     {
         QSqlQuery query(db);
 
-        query.clear();
-        ui->tableLibros->clearContents();
-        if(ui->line_Buscar->text() != "")
-        {
-            qDebug() << "Filtro" + ui->line_Buscar->text();
+        tabla->clearContents();
+
+        if(datoABuscar != "")
             _query(query);
-        }
         else
-            query.exec("SELECT * FROM libro ORDER BY codigo");
+            query.exec(seleccion);
 
         uint numTuplas = query.size();
-        uint numColumnas = 7;
-        //query.clear();
-
-        ui->tableLibros->setColumnCount(numColumnas);
-        ui->tableLibros->setRowCount(numTuplas);
-        ui->tableLibros->verticalHeader()->setVisible(false);
-
-        //ui->tableLibros->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter);
+        tabla->setColumnCount(numColumnas);
+        tabla->setRowCount(numTuplas);
+        tabla->verticalHeader()->setVisible(false);
 
         for(uint i = 0; query.next(); i++)
             for(uint j = 0; j < numColumnas; j++)
-                ui->tableLibros->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
+                tabla->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
         db.close();
     }
     else
         qDebug() << "Error: no se pudo acceder a la base de datos.";
-
 }
 
 void MainWindow::_query(QSqlQuery &query)
 {
+    switch(ui->tabWidget->currentIndex())
+    {
+        case 1:
+            consultaLibros(query);
+            break;
+
+        case 2:
+            consultaEmpleados(query);
+            break;
+    }
+}
+
+void MainWindow::consultaLibros(QSqlQuery &query)
+{
+    QString datoABuscar = ui->line_Buscar->text();
+
     switch(ui->comboBox->currentIndex())
     {
-    case 0://Entero
-
-        query.exec("SELECT * FROM libro WHERE cast(codigo as varchar) like '%" + ui->line_Buscar->text() + "%' ORDER BY codigo");
+    case 0:
+        query.exec("SELECT * FROM libro WHERE cast(codigo as varchar) like '%" + datoABuscar + "%' ORDER BY codigo");
         break;
+
     case 1:
-
-        query.exec("SELECT * FROM libro WHERE isbn like '%" + ui->line_Buscar->text() + "%' ORDER BY codigo");
+        query.exec("SELECT * FROM libro WHERE isbn like '%" + datoABuscar + "%' ORDER BY codigo");
         break;
+
     case 2:
-
-        query.exec("SELECT * FROM libro WHERE UPPER (titulo) like UPPER('%" + ui->line_Buscar->text() + "%') ORDER BY codigo");
+        query.exec("SELECT * FROM libro WHERE UPPER (titulo) like UPPER('%" + datoABuscar + "%') ORDER BY codigo");
         break;
+
     case 3:
-
-        query.exec("SELECT * FROM libro WHERE UPPER (autor) like UPPER ('%" + ui->line_Buscar->text() + "%') ORDER BY codigo");
+        query.exec("SELECT * FROM libro WHERE UPPER (autor) like UPPER ('%" + datoABuscar + "%') ORDER BY codigo");
         break;
+
     case 4:
-
-        query.exec("SELECT * FROM libro WHERE UPPER (editorial) like UPPER ('%" + ui->line_Buscar->text() + "%') ORDER BY codigo");
+        query.exec("SELECT * FROM libro WHERE UPPER (editorial) like UPPER ('%" + datoABuscar + "%') ORDER BY codigo");
         break;
-    case 5://Entero
 
-        query.exec("SELECT * FROM libro WHERE cast(anio_publicacion as varchar) like '%" + ui->line_Buscar->text() + "%' ORDER BY codigo");
+    case 5:
+        query.exec("SELECT * FROM libro WHERE cast(anio_publicacion as varchar) like '%" + datoABuscar + "%' ORDER BY codigo");
         break;
     }
     ui->line_Buscar->clear();
+}
+
+void MainWindow::consultaEmpleados(QSqlQuery &query)
+{
+    QString seleccion = "SELECT codigo, nombre, edad, salario, sexo, nombre_usuario," \
+                    " PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado ";
+
+    QString datoABuscar = ui->lineBuscarEmpleado->text();
+    QString complemento;
+
+    switch(ui->comboBoxEmpleados->currentIndex())
+    {
+        case 0:
+            complemento = "WHERE codigo=" + datoABuscar;
+            break;
+
+        case 1:
+            complemento = "WHERE UPPER(nombre) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+
+        case 2:
+            complemento = "WHERE edad=" + datoABuscar;
+            break;
+
+        case 3:
+            complemento = "WHERE salario=" + datoABuscar;
+            break;
+
+        case 4:
+            complemento = "WHERE sexo='" + datoABuscar + "'";
+            break;
+
+        case 5:
+            complemento = "WHERE UPPER(nombre_usuario) LIKE UPPER('%" + datoABuscar + "%') " ;
+            break;
+    }
+
+    seleccion += complemento + " ORDER BY codigo";
+    query.exec(seleccion);
+
+    qDebug() << query.lastError();
 }
 
 void MainWindow::llenarLista(QStringList &a)
@@ -115,13 +170,20 @@ void MainWindow::on_pushButton_clicked()
 {
     nuevo_libro *ventana = new nuevo_libro(this);
     ventana->exec();
-    mostrarLibros();
     delete ventana;
+
+    QString query = "SELECT * FROM LIBRO ORDER BY codigo";
+
+    llenarTabla(ui->tableLibros, ui->comboBox, ui->line_Buscar->text(),
+                query, 7);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    mostrarLibros();
+    QString query = "SELECT * FROM LIBRO ORDER BY codigo";
+
+    llenarTabla(ui->tableLibros, ui->comboBox, ui->line_Buscar->text(),
+                query, 7);
 
     qDebug() << ui->comboBox->currentText();
 }
@@ -148,12 +210,7 @@ void MainWindow::on_pushButton_3_clicked()
         delete prestamo;
     }
     else
-    {
-        QMessageBox msg(this);
-        msg.setText("Fuera de tiempo para realizar préstamos.");
-        msg.setWindowTitle("Fuera de tiempo");
-        msg.exec();
-    }
+        QMessageBox::information(this, "Fuera de tiempo", "Fuera de tiempo para realizar préstamos");
 }
 
 bool MainWindow::estaATiempo()
@@ -177,7 +234,7 @@ QTime MainWindow::horaCerrar()
     if(diaActual == 6)
         return QTime(14, 0); // sábado cierra a las 2pm
 
-    QTime(0, 0); // domingo no abre
+    return QTime(0, 0); // domingo no abre
 }
 
 QTime MainWindow::horaAbrir()
@@ -187,8 +244,7 @@ QTime MainWindow::horaAbrir()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    //estaATiempo()
-    if(true)
+    if(estaATiempo())
     {
         Devolucion *devolucion = new Devolucion(this);
         devolucion->exec();
@@ -196,10 +252,29 @@ void MainWindow::on_pushButton_5_clicked()
         delete devolucion;
     }
     else
-    {
-        QMessageBox msg(this);
-        msg.setText("Fuera de tiempo para devoluciones.");
-        msg.setWindowTitle("Fuera de tiempo");
-        msg.exec();
-    }
+        QMessageBox::information(this, "Fuera de tiempo", "Fuera de tiempo para devoluciones");
+}
+
+void MainWindow::on_botonCerrarSesion_clicked()
+{
+    this->close();
+
+    Dialog *ventanInicioSesion = new Dialog();
+    ventanInicioSesion->show();
+}
+
+void MainWindow::on_botonMostrarEmpleados_clicked()
+{
+    QString query = "SELECT codigo, nombre, edad, salario, sexo, nombre_usuario," \
+                    " PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado ORDER BY codigo";
+
+    llenarTabla(ui->tableEmpleados, ui->comboBoxEmpleados, ui->lineBuscarEmpleado->text(),
+                query, 7);
+}
+
+void MainWindow::on_botonAgregarEmpleado_clicked()
+{
+    AltaEmpleado *ventana = new AltaEmpleado(this);
+    ventana->exec();
+    delete ventana;
 }

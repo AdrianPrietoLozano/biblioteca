@@ -41,7 +41,7 @@ void Dialog::on_pushButtonAceptar_clicked()
 
     if(db.open())
     {
-        QString select = "SELECT codigo FROM empleado WHERE nombre_usuario=? "\
+        QString select = "SELECT codigo, es_administrador FROM empleado WHERE nombre_usuario=? "\
                 "AND PGP_SYM_DECRYPT(contrasenia, ?)=?";
 
         QSqlQuery query(db);
@@ -56,19 +56,14 @@ void Dialog::on_pushButtonAceptar_clicked()
 
         if(query.next())
         {
-            principal = new MainWindow(query.value("codigo").toString());
+            principal = new MainWindow(query.value("codigo").toString(), query.value("es_administrador").toBool());
 
-            this->hide();
+            this->close();
             principal->show();
         }
         else
-        {
-            QMessageBox msg;
-            msg.setText( "Usuario o contraseña incorrectos" );
-            msg.exec();
-        }
+            QMessageBox::critical(this, "Error", "Usuario o contraseña incorrectos");
     }
-
 }
 
 void Dialog::on_pushButtonCancelar_clicked()

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>829</width>
-    <height>539</height>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,13 +31,16 @@ background: -moz-linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">border-image: url(:/imagenes/fondoDes.png);
 background: none;
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -274,6 +277,22 @@ background: none;</string>
          <string>Devoluciones</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="botonCerrarSesion">
+        <property name="geometry">
+         <rect>
+          <x>730</x>
+          <y>10</y>
+          <width>75</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: none;</string>
+        </property>
+        <property name="text">
+         <string>Cerrar sesión</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -484,6 +503,170 @@ border-radius: 8px;</string>
             </color>
            </property>
           </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabEmpleados">
+       <attribute name="title">
+        <string>Empleados</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="2" column="4">
+         <widget class="QLineEdit" name="lineBuscarEmpleado">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border-radius: 8px;
+background-color: none;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QPushButton" name="botonAgregarEmpleado">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px double rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Agregar empleado</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" colspan="2">
+         <widget class="QComboBox" name="comboBoxEmpleados">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="4">
+         <widget class="QPushButton" name="botonMostrarEmpleados">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px solid rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Mostrar empleados</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="2" colspan="5">
+         <widget class="QTableWidget" name="tableEmpleados">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>787</width>
+            <height>390</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);
+border-radius: 8px;</string>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <column>
+           <property name="text">
+            <string>Código</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nombre</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Edad</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Salario</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sexo</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nombre de usuario</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Contraseña</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label_5">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background: none;</string>
+          </property>
+          <property name="text">
+           <string>Buscar por:</string>
+          </property>
          </widget>
         </item>
        </layout>
