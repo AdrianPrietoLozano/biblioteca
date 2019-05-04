@@ -13,6 +13,7 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    db = QSqlDatabase::database("coneccion");
 
     ui->line_Buscar->setPlaceholderText("Buscar");
 
@@ -31,13 +32,14 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
         ui->tabEmpleados->setEnabled(false);
 
     qDebug() << esAdministrador;
+
+    connect(ui->tableEmpleados, SIGNAL(cellPressed(int,int)),
+            this, SLOT(mostrarMenuEmpleado()));
 }
 
 void MainWindow::llenarTabla(QTableWidget *tabla, QComboBox *combo, const QString &datoABuscar,
                              const QString &seleccion, const uint numColumnas)
 {
-    QSqlDatabase db = QSqlDatabase::database("coneccion");
-
     if(db.open())
     {
         QSqlQuery query(db);
@@ -277,4 +279,62 @@ void MainWindow::on_botonAgregarEmpleado_clicked()
     AltaEmpleado *ventana = new AltaEmpleado(this);
     ventana->exec();
     delete ventana;
+}
+
+void MainWindow::modificarEmpleado()
+{
+    QString codigoEmpleado = ui->tableEmpleados->item(ui->tableEmpleados->currentRow(), 0)->text();
+
+    EliminarEmpleado *ventana = new EliminarEmpleado(codigoEmpleado, this);
+    ventana->exect();
+    delete ventana;
+
+    on_botonMostrarEmpleados_clicked();
+}
+
+void MainWindow::eliminarEmpleado()
+{
+    QString codigoEmpleado = ui->tableEmpleados->item(ui->tableEmpleados->currentRow(), 0)->text();
+    QString nombreEmpleado = ui->tableEmpleados->item(ui->tableEmpleados->currentRow(), 1)->text();
+
+    if(codigoEmpleado == codigoEmpleadoActual)
+        QMessageBox::critical(this, "Error", "El empleado actual esta activo");
+
+    else
+    {
+        int ret = QMessageBox::question(this, tr("Eliminar empleado"), tr("¿Seguro que desea eliminar al empleado "+ nombreEmpleado +"?"),
+                                        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+
+        if(ret == QMessageBox::Ok)
+        {
+            if(db.open())
+            {
+                QSqlQuery query(db);
+                QString eliminar = "DELETE FROM empleado WHERE codigo=" + codigoEmpleado;
+                if(query.exec(eliminar))
+                {
+                    db.commit();
+                    on_botonMostrarEmpleados_clicked();
+                }
+                else
+                    QMessageBox::critical(this, "Error", "No se pudo eliminar el empleado");
+            }
+        }
+    }
+}
+
+void MainWindow::mostrarMenuEmpleado()
+{
+    QMenu opciones(tr("Opciones"));
+
+    QAction editar(QIcon(":/imagenes/editar.png"), "Modificar", this);
+    QAction eliminar(QIcon(":/imagenes/eliminar.png"), "Eliminar", this);
+
+    connect(&editar, SIGNAL(triggered(bool)), this, SLOT(modificarEmpleado()));
+    connect(&eliminar, SIGNAL(triggered(bool)), this, SLOT(eliminarEmpleado()));
+
+    opciones.addAction(&editar);
+    opciones.addAction(&eliminar);
+
+    opciones.exec(QCursor::pos());
 }

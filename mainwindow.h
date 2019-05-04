@@ -37,9 +37,14 @@ private slots:
 
     void on_botonAgregarEmpleado_clicked();
 
+    void mostrarMenuEmpleado();
+    void modificarEmpleado();
+    void eliminarEmpleado();
+
 private:
     Ui::MainWindow *ui;
     QString codigoEmpleadoActual;
+    QSqlDatabase db;
 
     bool estaATiempo();
     QTime horaCerrar();
