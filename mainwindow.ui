@@ -512,48 +512,7 @@ border-radius: 8px;</string>
         <string>Empleados</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="2" column="4">
-         <widget class="QLineEdit" name="lineBuscarEmpleado">
-          <property name="styleSheet">
-           <string notr="true">border-image: none;
-border-radius: 8px;
-background-color: none;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="4">
-         <widget class="QPushButton" name="botonAgregarEmpleado">
-          <property name="styleSheet">
-           <string notr="true">border-image: none;
-border: 1px double rgb(0, 0, 0);
-background-color: rgb(203, 203, 203);</string>
-          </property>
-          <property name="text">
-           <string>Agregar empleado</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2" colspan="2">
-         <widget class="QComboBox" name="comboBoxEmpleados">
-          <property name="styleSheet">
-           <string notr="true">border-image: none;
-background-color: rgb(255, 255, 255);</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="4">
-         <widget class="QPushButton" name="botonMostrarEmpleados">
-          <property name="styleSheet">
-           <string notr="true">border-image: none;
-border: 1px solid rgb(0, 0, 0);
-background-color: rgb(203, 203, 203);</string>
-          </property>
-          <property name="text">
-           <string>Mostrar empleados</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" rowspan="2" colspan="5">
+        <item row="0" column="0" colspan="3">
          <widget class="QTableWidget" name="tableEmpleados">
           <property name="enabled">
            <bool>true</bool>
@@ -658,7 +617,7 @@ border-radius: 8px;</string>
           </column>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="1" column="0">
          <widget class="QLabel" name="label_5">
           <property name="styleSheet">
            <string notr="true">border-image: none;
@@ -666,6 +625,47 @@ background: none;</string>
           </property>
           <property name="text">
            <string>Buscar por:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBoxEmpleados">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="lineBuscarEmpleado">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border-radius: 8px;
+background-color: none;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QPushButton" name="botonMostrarEmpleados">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px solid rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Mostrar empleados</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="botonAgregarEmpleado">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px double rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Agregar empleado</string>
           </property>
          </widget>
         </item>

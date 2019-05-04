@@ -1,36 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AltaEmpleado</class>
- <widget class="QDialog" name="AltaEmpleado">
+ <class>ModificarEmpleado</class>
+ <widget class="QDialog" name="ModificarEmpleado">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>426</height>
+    <width>440</width>
+    <height>477</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Alta de empleado</string>
+   <string>Dialog</string>
   </property>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>190</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Edad</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>330</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Nombre de
+usuario</string>
+   </property>
+  </widget>
   <widget class="QLineEdit" name="lineEditUsuario">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>250</y>
-     <width>341</width>
+     <x>100</x>
+     <y>330</y>
+     <width>321</width>
      <height>20</height>
     </rect>
    </property>
-   <property name="placeholderText">
-    <string>Nombre de usuario</string>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>20</y>
+     <width>271</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Modificar empleado</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>290</y>
+     <x>20</x>
+     <y>380</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -46,31 +104,11 @@
     <string>Contraseña</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>130</y>
-     <width>51</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Salario</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>90</y>
+     <x>40</x>
+     <y>140</y>
      <width>51</width>
      <height>16</height>
     </rect>
@@ -86,125 +124,51 @@
     <string>Nombre</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButtonAceptar">
+  <widget class="QSpinBox" name="spinBoxEdad">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>390</y>
-     <width>75</width>
-     <height>23</height>
+     <x>100</x>
+     <y>190</y>
+     <width>111</width>
+     <height>21</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Aceptar</string>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>190</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
    </property>
-   <property name="checkable">
-    <bool>false</bool>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Salario</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEditContrasenia">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>290</y>
-     <width>341</width>
+     <x>100</x>
+     <y>380</y>
+     <width>321</width>
      <height>20</height>
     </rect>
-   </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Password</enum>
-   </property>
-   <property name="placeholderText">
-    <string>Contraseña</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_5">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>250</y>
-     <width>121</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Nombre de usuario</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_7">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>330</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Repite la contraseña</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButtonCancelar">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>390</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Cancelar</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEditNombre">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>90</y>
-     <width>411</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="placeholderText">
-    <string>Nombre del empleado</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEditRepiteContrasenia">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>330</y>
-     <width>341</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Password</enum>
-   </property>
-   <property name="placeholderText">
-    <string>Repite la contraseña</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>180</y>
+     <x>60</x>
+     <y>250</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -220,37 +184,30 @@
     <string>Sexo</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLineEdit" name="lineEditNombre">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>130</y>
-     <width>41</width>
-     <height>16</height>
+     <x>100</x>
+     <y>140</y>
+     <width>321</width>
+     <height>20</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Edad</string>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupBoxSexo">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>170</y>
+     <x>100</x>
+     <y>240</y>
      <width>201</width>
      <height>41</height>
     </rect>
    </property>
    <property name="title">
     <string/>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
    </property>
    <widget class="QRadioButton" name="radioButtonHombre">
     <property name="geometry">
@@ -269,8 +226,11 @@
     <property name="text">
      <string>Hombre</string>
     </property>
-    <property name="checked">
+    <property name="checkable">
      <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButtonMujer">
@@ -292,42 +252,58 @@
     </property>
    </widget>
   </widget>
-  <widget class="QSpinBox" name="spinBoxEdad">
+  <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>130</y>
-     <width>151</width>
-     <height>21</height>
+     <x>270</x>
+     <y>440</y>
+     <width>156</width>
+     <height>23</height>
     </rect>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>30</y>
-     <width>271</width>
-     <height>31</height>
+     <x>50</x>
+     <y>100</y>
+     <width>51</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>20</pointsize>
+     <pointsize>10</pointsize>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>Agregar empleado</string>
+    <string>Código</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditCodigo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>100</y>
+     <width>321</width>
+     <height>20</height>
+    </rect>
    </property>
   </widget>
   <widget class="QDoubleSpinBox" name="doubleSpinBoxSalario">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>130</y>
-     <width>181</width>
+     <x>300</x>
+     <y>190</y>
+     <width>121</width>
      <height>22</height>
     </rect>
    </property>

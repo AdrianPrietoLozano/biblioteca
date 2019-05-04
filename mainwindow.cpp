@@ -5,7 +5,11 @@
 #include "devolucion.h"
 #include "dialog.h"
 #include "altaempleado.h"
+#include "modificarempleado.h"
 #include <QMessageBox>
+
+#define NUM_COLUMNAS_LIBRO 7
+#define NUM_COLUMNAS_EMPLEADO 7
 
 MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent) :
     codigoEmpleadoActual(codigoEmpleado),
@@ -33,11 +37,12 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
 
     qDebug() << esAdministrador;
 
+    ui->tableEmpleados->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableEmpleados, SIGNAL(cellPressed(int,int)),
             this, SLOT(mostrarMenuEmpleado()));
 }
 
-void MainWindow::llenarTabla(QTableWidget *tabla, QComboBox *combo, const QString &datoABuscar,
+void MainWindow::llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
                              const QString &seleccion, const uint numColumnas)
 {
     if(db.open())
@@ -174,18 +179,14 @@ void MainWindow::on_pushButton_clicked()
     ventana->exec();
     delete ventana;
 
-    QString query = "SELECT * FROM LIBRO ORDER BY codigo";
-
-    llenarTabla(ui->tableLibros, ui->comboBox, ui->line_Buscar->text(),
-                query, 7);
+    on_pushButton_2_clicked();
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
     QString query = "SELECT * FROM LIBRO ORDER BY codigo";
 
-    llenarTabla(ui->tableLibros, ui->comboBox, ui->line_Buscar->text(),
-                query, 7);
+    llenarTabla(ui->tableLibros, ui->line_Buscar->text(), query, NUM_COLUMNAS_LIBRO);
 
     qDebug() << ui->comboBox->currentText();
 }
@@ -268,10 +269,10 @@ void MainWindow::on_botonCerrarSesion_clicked()
 void MainWindow::on_botonMostrarEmpleados_clicked()
 {
     QString query = "SELECT codigo, nombre, edad, salario, sexo, nombre_usuario," \
-                    " PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado ORDER BY codigo";
+                    " PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado "\
+                    " WHERE es_administrador=FALSE ORDER BY codigo";
 
-    llenarTabla(ui->tableEmpleados, ui->comboBoxEmpleados, ui->lineBuscarEmpleado->text(),
-                query, 7);
+    llenarTabla(ui->tableEmpleados, ui->lineBuscarEmpleado->text(), query, NUM_COLUMNAS_EMPLEADO);
 }
 
 void MainWindow::on_botonAgregarEmpleado_clicked()
@@ -279,14 +280,16 @@ void MainWindow::on_botonAgregarEmpleado_clicked()
     AltaEmpleado *ventana = new AltaEmpleado(this);
     ventana->exec();
     delete ventana;
+
+    on_botonMostrarEmpleados_clicked();
 }
 
 void MainWindow::modificarEmpleado()
 {
     QString codigoEmpleado = ui->tableEmpleados->item(ui->tableEmpleados->currentRow(), 0)->text();
 
-    EliminarEmpleado *ventana = new EliminarEmpleado(codigoEmpleado, this);
-    ventana->exect();
+    ModificarEmpleado *ventana = new ModificarEmpleado(codigoEmpleado, this);
+    ventana->exec();
     delete ventana;
 
     on_botonMostrarEmpleados_clicked();
@@ -302,7 +305,7 @@ void MainWindow::eliminarEmpleado()
 
     else
     {
-        int ret = QMessageBox::question(this, tr("Eliminar empleado"), tr("¿Seguro que desea eliminar al empleado "+ nombreEmpleado +"?"),
+        int ret = QMessageBox::question(this, "Eliminar empleado", "¿Seguro que desea eliminar al empleado "+ nombreEmpleado +"?",
                                         QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
         if(ret == QMessageBox::Ok)
@@ -325,6 +328,8 @@ void MainWindow::eliminarEmpleado()
 
 void MainWindow::mostrarMenuEmpleado()
 {
+    ui->tableEmpleados->selectRow(ui->tableEmpleados->currentRow());
+
     QMenu opciones(tr("Opciones"));
 
     QAction editar(QIcon(":/imagenes/editar.png"), "Modificar", this);

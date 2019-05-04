@@ -6,5 +6,7 @@
         <file>imagenes/fondoDes.png</file>
         <file>imagenes/banner_biblioteca.jpg</file>
         <file>imagenes/estante_libros.jpg</file>
+        <file>imagenes/editar.png</file>
+        <file>imagenes/eliminar.png</file>
     </qresource>
 </RCC>

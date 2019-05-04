@@ -53,7 +53,7 @@ private:
     void consultaEmpleados(QSqlQuery &query);
     void _query(QSqlQuery &query);
     void llenarLista(QStringList &);
-    void llenarTabla(QTableWidget *tabla, QComboBox *combo, const QString &datoABuscar,
+    void llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
                                  const QString &seleccion, const uint numColumnas);
 };
 

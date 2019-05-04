@@ -35,7 +35,7 @@ void AltaEmpleado::on_pushButtonAceptar_clicked()
         {
             if(ui->lineEditContrasenia->text() == ui->lineEditRepiteContrasenia->text()) // las contr. coinciden
                 if(insertarEmpleado())
-                    QMessageBox::information(this, "Operación exitosa", "Empleado agregado con exito");
+                    close();
                 else
                     QMessageBox::critical(this, "Error", "Ocurrio algún error al insertar el empleado");
             else
@@ -62,7 +62,7 @@ bool AltaEmpleado::insertarEmpleado()
         query.bindValue(1, ui->lineEditUsuario->text());
         query.bindValue(2, ui->lineEditContrasenia->text());
         query.bindValue(3, ui->spinBoxEdad->text());
-        query.bindValue(4, ui->spinBoxSalario->text());
+        query.bindValue(4, ui->doubleSpinBoxSalario->text());
         query.bindValue(5, sexo);
 
         if(query.exec())
