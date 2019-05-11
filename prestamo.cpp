@@ -5,10 +5,9 @@
 #include <QMessageBox>
 #include <QDateTime>
 
-// segundos en 3 horas
 #define DIAS_PRESTAR_PRIMER_EJEMPLAR 3
 #define DIAS_PRESTAMO_ESTUDIANTE 7
-#define DIAS_PRESTAMO_MAESTRO 15
+#define DIAS_PRESTAMO_MAESTRO 14
 #define MAX_PRESTAMOS_ESTUDIANTE 5
 #define MAX_PRESTAMOS_MAESTRO 7
 
@@ -100,8 +99,8 @@ QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
     if(db.open())
     {
         QString select = "SELECT nombre, departamento, tipo, COUNT(prestamo.codigo_cliente) AS cantidad_prestamos "\
-                "FROM usuario LEFT JOIN prestamo ON usuario.codigo=prestamo.codigo_cliente "\
-                "WHERE usuario.codigo=" + codigo + " GROUP BY usuario.codigo";
+                "FROM cliente LEFT JOIN prestamo ON cliente.codigo=prestamo.codigo_cliente "\
+                "WHERE cliente.codigo=" + codigo + " GROUP BY cliente.codigo";
         query.exec(select);
 
         if(query.next())
@@ -241,7 +240,8 @@ void Prestamo::mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTim
 
 void Prestamo::on_botonAceptar_clicked()
 {
-    if(QTime::currentTime() <= horaDeCerrar)
+    //QTime::currentTime() <= horaDeCerrar
+    if(true)
     {
         QString codigoLibro = ui->lineEditCodigoLibro->text();
         QString codigoCliente = ui->lineEditCodigoCliente->text();

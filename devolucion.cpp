@@ -129,8 +129,8 @@ QMap<QString, QString> Devolucion::atributosCliente(const QString &codigo)
     if(db.open())
     {
         QString select = "SELECT nombre, departamento, tipo, COUNT(prestamo.codigo_cliente) AS cantidad_prestamos "\
-                "FROM usuario LEFT JOIN prestamo ON usuario.codigo=prestamo.codigo_cliente "\
-                "WHERE usuario.codigo=" + codigo + " GROUP BY usuario.codigo";
+                "FROM cliente LEFT JOIN prestamo ON cliente.codigo=prestamo.codigo_cliente "\
+                "WHERE cliente.codigo=" + codigo + " GROUP BY cliente.codigo";
         query.exec(select);
 
         if(query.next())
@@ -311,7 +311,8 @@ void Devolucion::on_botonAceptar_clicked()
     QString codigoLibro = ui->lineEditCodigoLibro->text();
     QString codigoCliente = ui->lineEditCodigoCliente->text();
 
-    if(QTime::currentTime() <= horaDeCerrar)
+    //QTime::currentTime() <= horaDeCerrar
+    if(true)
     {
         QSqlQuery query(db);
 
@@ -329,6 +330,7 @@ void Devolucion::on_botonAceptar_clicked()
                 {
                     penalizacion = calcularPenalizacion(query.value("ejemplar").toInt(),
                                                         query.value("fecha_entrega").toDateTime());
+
                     retraso = calcularRetraso(query.value("ejemplar").toInt(),
                                               query.value("fecha_entrega").toDateTime());
 

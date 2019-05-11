@@ -41,6 +41,15 @@ private slots:
     void modificarEmpleado();
     void eliminarEmpleado();
 
+    void mostrarMenuCliente();
+    void modificarCliente();
+    void eliminarCliente();
+
+
+    void on_botonMostrarClientes_clicked();
+
+    void on_botonAgregarClientes_clicked();
+
 private:
     Ui::MainWindow *ui;
     QString codigoEmpleadoActual;
@@ -51,6 +60,8 @@ private:
     QTime horaAbrir();
     void consultaLibros(QSqlQuery &query);
     void consultaEmpleados(QSqlQuery &query);
+    void consultaClientes(QSqlQuery &query);
+    bool clienteTienePendientes(const QString &codigoCliente);
     void _query(QSqlQuery &query);
     void llenarLista(QStringList &);
     void llenarTabla(QTableWidget *tabla, const QString &datoABuscar,

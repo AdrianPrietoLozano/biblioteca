@@ -507,6 +507,182 @@ border-radius: 8px;</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tabClientes">
+       <attribute name="title">
+        <string>Clientes</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0" colspan="3">
+         <widget class="QTableWidget" name="tableClientes">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>787</width>
+            <height>390</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);
+border-radius: 8px;</string>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <column>
+           <property name="text">
+            <string>Código</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nombre</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Teléfono</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Departamento</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Carrera</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Grado</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sexo</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tipo</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background: none;</string>
+          </property>
+          <property name="text">
+           <string>Buscar por:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBoxClientes">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="lineBuscarClientes">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border-radius: 8px;
+background-color: none;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QPushButton" name="botonMostrarClientes">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px solid rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Mostrar clientes</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="botonAgregarClientes">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px double rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Agregar cliente</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabEmpleados">
        <attribute name="title">
         <string>Empleados</string>

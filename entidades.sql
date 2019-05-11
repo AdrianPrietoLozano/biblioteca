@@ -1,41 +1,10 @@
-CREATE TABLE prestamo(
-	codigo SERIAL PRIMARY KEY UNIQUE NOT NULL,
-	codigo_libro INTEGER UNIQUE NOT NULL,
-	codigo_cliente INTEGER NOT NULL,
-	codigo_empleado INTEGER NOT NULL,
-	fecha_prestamo TIMESTAMP,
-	fecha_entrega TIMESTAMP,
-	penalizacion DECIMAL DEFAULT 0.0
-);
 
-CREATE TABLE usuario(
-	codigo SERIAL PRIMARY KEY UNIQUE NOT NULL,
-	nombre VARCHAR(100) NOT NULL,
-	telefono VARCHAR(25),
-	departamento VARCHAR(100),
-	carrera VARCHAR(50),
-	grado INTEGER,
-	sexo CHAR(1),
-	tipo CHAR(1)
-);
-
-
-CREATE TABLE empleado(
-	codigo SERIAL PRIMARY KEY UNIQUE NOT NULL,
-	nombre VARCHAR(100) NOT NULL,
-	nombre_usuario VARCHAR(30) UNIQUE NOT NULL,
-	contrasenia BYTEA NOT NULL,
-	edad INTEGER,
-	salario DECIMAL,
-	sexo CHAR(1)
-);
-
-INSERT INTO empleado(nombre, nombre_usuario, contrasenia, edad, salario, sexo)
-VALUES('Equipo 7', 'equipo 7', PGP_SYM_ENCRYPT('12345', 'equipo7'),
-    	20, 1000, 'H'
-);
-
-
+/*
+*
+*
+IGNORAR ESTO
+*
+*
 INSERT INTO usuario(nombre, telefono, departamento, carrera, grado, sexo, tipo)
 	VALUES('Adrian', '12345', 'alguno', 'inni', '4', 'H', 'E');
 
@@ -49,4 +18,101 @@ SELECT usuario.tipo AS tipo, count(prestamo.codigo) AS num_prestamos
 		AND prestamo.codigo_cliente=1 GROUP BY usuario.tipo
 
 
-SELECT nombre, nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado;
+SELECT codigo, nombre, nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7'),
+edad, salario, sexo FROM empleado;
+*/
+
+
+CREATE TABLE libro
+(
+	codigo SERIAL NOT NULL,
+	isbn VARCHAR(30) NOT NULL,
+	titulo VARCHAR(100) NOT NULL,
+	autor VARCHAR(100),
+	editorial VARCHAR(100),
+	ejemplar INT NOT NULL,
+	anio_publicacion INT,
+	PRIMARY KEY(codigo)
+);
+
+
+CREATE TABLE cliente
+(
+	codigo SERIAL NOT NULL,
+	nombre VARCHAR(100) NOT NULL,
+	telefono VARCHAR(25),
+	departamento VARCHAR(100),
+	carrera VARCHAR(50),
+	grado INT,
+	sexo CHAR CHECK(sexo IN ('H', 'M')),
+	tipo CHAR CHECK(tipo IN ('E', 'P', 'A')) DEFAULT 'E',
+	PRIMARY KEY(codigo)
+);
+
+
+CREATE TABLE empleado
+(
+	codigo SERIAL NOT NULL,
+	nombre VARCHAR(100) NOT NULL,
+	nombre_usuario VARCHAR(30) NOT NULL,
+	contrasenia BYTEA NOT NULL,
+	edad INT,
+	salario DECIMAL,
+	sexo CHAR CHECK(sexo IN ('H', 'M')),
+	es_administrador BOOLEAN NOT NULL DEFAULT FALSE,
+	PRIMARY KEY(codigo),
+	UNIQUE(nombre_usuario)
+);
+
+CREATE TABLE prestamo
+(
+	codigo SERIAL NOT NULL,
+	codigo_libro INT NOT NULL,
+	codigo_cliente INT NOT NULL,
+	codigo_empleado INT NOT NULL,
+	fecha_prestamo TIMESTAMP NOT NULL,
+	fecha_entrega TIMESTAMP NOT NULL,
+	PRIMARY KEY(codigo),
+	UNIQUE(codigo_libro),
+	FOREIGN KEY(codigo_libro) REFERENCES libro(codigo),
+	FOREIGN KEY(codigo_cliente) REFERENCES cliente(codigo),
+	FOREIGN key(codigo_empleado) REFERENCES empleado(codigo)
+);
+
+INSERT INTO empleado(nombre, nombre_usuario, contrasenia, edad, salario,
+	sexo, es_administrador)
+	VALUES('equipo 7', 'equipo 7', PGP_SYM_ENCRYPT('12345', 'equipo7'),
+    	20, 1000, 'H', TRUE);
+
+
+
+
+
+SELECT codigo, nombre, telefono, departamento, carrera, grado, 
+CASE WHEN sexo='H' THEN 'Hombre'
+     WHEN sexo='M' THEN 'Mujer'
+END AS sexo,
+CASE WHEN tipo='E' THEN 'Estudiante'
+     WHEN tipo='P' THEN 'Profesor'
+     WHEN tipo='A' THEN 'Estudiante y profesor'
+END AS tipoA
+FROM cliente;
+
+
+
+
+if(tipo == 'E')
+	ui->radioButtonEstudiante->setChecked(true);
+
+else if(tipo == 'P')
+	ui->radioButtonProfesor->setChecked(true);
+
+else if(tipo == 'A')
+	ui->radioButtonAmbos->setChecked(true);
+
+else
+{
+	ui->radioButtonEstudiante->setChecked(false);
+	ui->radioButtonProfesor->setChecked(false);
+	ui->radioButtonAmbos->setChecked(false);
+}

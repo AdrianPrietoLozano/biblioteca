@@ -6,10 +6,12 @@
 #include "dialog.h"
 #include "altaempleado.h"
 #include "modificarempleado.h"
+#include "altacliente.h"
 #include <QMessageBox>
 
 #define NUM_COLUMNAS_LIBRO 7
 #define NUM_COLUMNAS_EMPLEADO 7
+#define NUM_COLUMNAS_CLIENTE 8
 
 MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent) :
     codigoEmpleadoActual(codigoEmpleado),
@@ -21,25 +23,27 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
 
     ui->line_Buscar->setPlaceholderText("Buscar");
 
-    QStringList a;
-
-    llenarLista(a);
-
-    ui->comboBox->addItems(a);
-
-    QStringList lista = {"Código", "Nombre", "Edad", "Salario", "Sexo", "Nombre de usuario"};
-    ui->comboBoxEmpleados->addItems(lista);
-
     if(esAdministrador)
         ui->tabEmpleados->setEnabled(true);
     else
         ui->tabEmpleados->setEnabled(false);
 
-    qDebug() << esAdministrador;
+    QStringList a;
+    llenarLista(a);
+    ui->comboBox->addItems(a);
 
-    ui->tableEmpleados->setContextMenuPolicy(Qt::CustomContextMenu);
+    QStringList listaEmpleados = {"Código", "Nombre", "Edad", "Salario", "Sexo", "Nombre de usuario"};
+    ui->comboBoxEmpleados->addItems(listaEmpleados);
+
+    QStringList listaClientes = {"Código", "Nombre", "Teléfono", "Departamento", "Carrera",
+                                 "Grado", "Sexo", "Tipo"};
+    ui->comboBoxClientes->addItems(listaClientes);
+
     connect(ui->tableEmpleados, SIGNAL(cellPressed(int,int)),
             this, SLOT(mostrarMenuEmpleado()));
+
+    connect(ui->tableClientes, SIGNAL(cellPressed(int,int)),
+            this, SLOT(mostrarMenuCliente()));
 }
 
 void MainWindow::llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
@@ -48,8 +52,6 @@ void MainWindow::llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
     if(db.open())
     {
         QSqlQuery query(db);
-
-        tabla->clearContents();
 
         if(datoABuscar != "")
             _query(query);
@@ -79,6 +81,10 @@ void MainWindow::_query(QSqlQuery &query)
             break;
 
         case 2:
+            consultaClientes(query);
+            break;
+
+        case 3:
             consultaEmpleados(query);
             break;
     }
@@ -119,8 +125,12 @@ void MainWindow::consultaLibros(QSqlQuery &query)
 
 void MainWindow::consultaEmpleados(QSqlQuery &query)
 {
-    QString seleccion = "SELECT codigo, nombre, edad, salario, sexo, nombre_usuario," \
-                    " PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado ";
+    QString seleccion = "SELECT codigo, nombre, edad, salario, "\
+                        "CASE WHEN sexo='H' THEN 'Hombre' "\
+                        "     WHEN sexo='M' THEN 'Mujer' "\
+                        "END AS sexo, "\
+                        "nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7') " \
+                        "FROM empleado WHERE es_administrador=FALSE AND ";
 
     QString datoABuscar = ui->lineBuscarEmpleado->text();
     QString complemento;
@@ -128,34 +138,87 @@ void MainWindow::consultaEmpleados(QSqlQuery &query)
     switch(ui->comboBoxEmpleados->currentIndex())
     {
         case 0:
-            complemento = "WHERE codigo=" + datoABuscar;
+            complemento = "CAST(codigo as varchar)='" + datoABuscar +"'";
             break;
 
         case 1:
-            complemento = "WHERE UPPER(nombre) LIKE UPPER('%" + datoABuscar + "%') ";
+            complemento = "UPPER(nombre) LIKE UPPER('%" + datoABuscar + "%') ";
             break;
 
         case 2:
-            complemento = "WHERE edad=" + datoABuscar;
+            complemento = "CAST(edad as varchar)='" + datoABuscar + "'";
             break;
 
         case 3:
-            complemento = "WHERE salario=" + datoABuscar;
+            complemento = "CAST(salario as varchar)='" + datoABuscar + "'";
             break;
 
         case 4:
-            complemento = "WHERE sexo='" + datoABuscar + "'";
+            complemento = "UPPER(sexo) LIKE UPPER('%" + datoABuscar + "%') ";
             break;
 
         case 5:
-            complemento = "WHERE UPPER(nombre_usuario) LIKE UPPER('%" + datoABuscar + "%') " ;
+            complemento = "UPPER(nombre_usuario) LIKE UPPER('%" + datoABuscar + "%') " ;
             break;
     }
 
     seleccion += complemento + " ORDER BY codigo";
     query.exec(seleccion);
+    ui->lineBuscarEmpleado->clear();
+}
 
-    qDebug() << query.lastError();
+void MainWindow::consultaClientes(QSqlQuery &query)
+{
+    QString seleccion = "SELECT codigo, nombre, telefono, departamento, carrera, grado, "\
+                        "CASE WHEN sexo='H' THEN 'Hombre' "\
+                        "     WHEN sexo='M' THEN 'Mujer' "\
+                        "END AS sexo, "\
+                        "CASE WHEN tipo='E' THEN 'Estudiante' "\
+                        "     WHEN tipo='P' THEN 'Profesor' "\
+                        "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
+                        "END AS tipo "\
+                        "FROM cliente ";
+
+    QString datoABuscar = ui->lineBuscarClientes->text();
+    QString complemento;
+
+    switch(ui->comboBoxClientes->currentIndex())
+    {
+        case 0: // código
+            complemento = "WHERE CAST(codigo as varchar)='" + datoABuscar + "'";
+            break;
+
+        case 1: // nombre
+            complemento = "WHERE UPPER(nombre) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+
+        case 2: // teléfono
+            complemento = "WHERE UPPER(telefono) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+
+        case 3: // departamento
+            complemento = "WHERE UPPER(departamento) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+        case 4: // carrera
+            complemento = "WHERE UPPER(carrera) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+
+        case 5: // grado
+            complemento = "WHERE CAST(grado as varchar)='" + datoABuscar + "'";
+            break;
+
+        case 6: // sexo
+            complemento = "WHERE sexo='" + datoABuscar + "'";
+            break;
+
+        case 7: // tipo
+            complemento = "WHERE tipo='" + datoABuscar + "'";
+            break;
+    }
+
+    seleccion += complemento + " ORDER BY codigo";
+    query.exec(seleccion);
+    ui->lineBuscarClientes->clear();
 }
 
 void MainWindow::llenarLista(QStringList &a)
@@ -205,7 +268,8 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    if(estaATiempo())
+    //estaATiempo()
+    if(true)
     {
         Prestamo *prestamo = new Prestamo(this, codigoEmpleadoActual);
         prestamo->exec();
@@ -247,7 +311,8 @@ QTime MainWindow::horaAbrir()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    if(estaATiempo())
+    //estaATiempo()
+    if(true)
     {
         Devolucion *devolucion = new Devolucion(this);
         devolucion->exec();
@@ -268,9 +333,12 @@ void MainWindow::on_botonCerrarSesion_clicked()
 
 void MainWindow::on_botonMostrarEmpleados_clicked()
 {
-    QString query = "SELECT codigo, nombre, edad, salario, sexo, nombre_usuario," \
-                    " PGP_SYM_DECRYPT(contrasenia, 'equipo7') FROM empleado "\
-                    " WHERE es_administrador=FALSE ORDER BY codigo";
+    QString query = "SELECT codigo, nombre, edad, salario, "\
+                    "CASE WHEN sexo='H' THEN 'Hombre'"\
+                    "     WHEN sexo='M' THEN 'Mujer'"\
+                    "END AS sexo, "\
+                    "nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7')" \
+                    "FROM empleado WHERE es_administrador=FALSE ORDER BY codigo";
 
     llenarTabla(ui->tableEmpleados, ui->lineBuscarEmpleado->text(), query, NUM_COLUMNAS_EMPLEADO);
 }
@@ -305,7 +373,8 @@ void MainWindow::eliminarEmpleado()
 
     else
     {
-        int ret = QMessageBox::question(this, "Eliminar empleado", "¿Seguro que desea eliminar al empleado "+ nombreEmpleado +"?",
+        int ret = QMessageBox::question(this, "Eliminar empleado",
+                                        "¿Seguro que desea eliminar al empleado " + nombreEmpleado + "?",
                                         QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
         if(ret == QMessageBox::Ok)
@@ -326,6 +395,54 @@ void MainWindow::eliminarEmpleado()
     }
 }
 
+bool MainWindow::clienteTienePendientes(const QString &codigoCliente)
+{
+    if(db.open())
+    {
+        QSqlQuery query(db);
+
+        QString select = "SELECT * FROM prestamo WHERE codigo_cliente=" + codigoCliente;
+        qDebug() << select;
+        query.exec(select);
+        qDebug() << query.lastError();
+
+        return query.next();
+    }
+    return true;
+}
+
+void MainWindow::eliminarCliente()
+{
+    QString codigoCliente = ui->tableClientes->item(ui->tableClientes->currentRow(), 0)->text();
+    QString nombreCliente = ui->tableClientes->item(ui->tableClientes->currentRow(), 1)->text();
+
+    if(clienteTienePendientes(codigoCliente))
+    {
+        QMessageBox::critical(this, "Error", "El cliente no se puede eliminar porque tiene libros prestados");
+    }
+    else
+    {
+        int ret = QMessageBox::question(this, "Eliminar cliente",
+                                        "¿Seguro que desea eliminar al cliente "+ nombreCliente +"?",
+                                        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+        if(ret == QMessageBox::Ok)
+        {
+            QSqlQuery query(db);
+            QString eliminar = "DELETE FROM cliente WHERE codigo=" + codigoCliente;
+
+            if(query.exec(eliminar))
+            {
+                db.commit();
+                on_botonMostrarClientes_clicked();
+            }
+            else
+                QMessageBox::critical(this, "Error", "El cliente no se pudo eliminar");
+        }
+    }
+}
+
+
+
 void MainWindow::mostrarMenuEmpleado()
 {
     ui->tableEmpleados->selectRow(ui->tableEmpleados->currentRow());
@@ -342,4 +459,62 @@ void MainWindow::mostrarMenuEmpleado()
     opciones.addAction(&eliminar);
 
     opciones.exec(QCursor::pos());
+}
+
+void MainWindow::mostrarMenuCliente()
+{
+    ui->tableClientes->selectRow(ui->tableClientes->currentRow());
+
+    QMenu opciones(tr("Opciones"));
+
+    QAction editar(QIcon(":/imagenes/editar.png"), "Modificar", this);
+    QAction eliminar(QIcon(":/imagenes/eliminar.png"), "Eliminar", this);
+
+    connect(&editar, SIGNAL(triggered(bool)), this, SLOT(modificarCliente()));
+    connect(&eliminar, SIGNAL(triggered(bool)), this, SLOT(eliminarCliente()));
+
+    opciones.addAction(&editar);
+    opciones.addAction(&eliminar);
+
+    opciones.exec(QCursor::pos());
+}
+
+
+void MainWindow::on_botonMostrarClientes_clicked()
+{
+    QString query = "SELECT codigo, nombre, telefono, departamento, carrera, grado, "\
+                    "CASE WHEN sexo='H' THEN 'Hombre' "\
+                    "     WHEN sexo='M' THEN 'Mujer' "\
+                    "END AS sexo, "\
+                    "CASE WHEN tipo='E' THEN 'Estudiante' "\
+                    "     WHEN tipo='P' THEN 'Profesor' "\
+                    "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
+                    "END AS tipo "\
+                    "FROM cliente ORDER BY codigo";
+
+    llenarTabla(ui->tableClientes, ui->lineBuscarClientes->text(), query, NUM_COLUMNAS_CLIENTE);
+}
+
+void MainWindow::on_botonAgregarClientes_clicked()
+{
+    QString codigoCliente = ui->tableClientes->item(ui->tableClientes->currentRow(), 0)->text();
+
+    AltaCliente *ventana = new AltaCliente(this, codigoCliente, AltaCliente::INSERTAR,
+                                           "Agregar cliente", "Agregar cliente");
+    ventana->exec();
+    delete ventana;
+
+    on_botonMostrarClientes_clicked();
+}
+
+void MainWindow::modificarCliente()
+{
+    QString codigoCliente = ui->tableClientes->item(ui->tableClientes->currentRow(), 0)->text();
+
+    AltaCliente *ventanaModificar = new AltaCliente(this, codigoCliente, AltaCliente::MODIFICAR,
+                                                    "Modificar cliente", "Modificar cliente");
+    ventanaModificar->exec();
+    delete ventanaModificar;
+
+    on_botonMostrarClientes_clicked();
 }
