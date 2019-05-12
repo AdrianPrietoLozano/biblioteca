@@ -19,6 +19,8 @@ public:
     explicit Prestamo(QWidget *parent, const QString &codigoEmpleado);
     ~Prestamo();
 
+    static QMap<QString, QString> atributosCliente(const QString &codigo);
+
 private slots:
     void on_botonCancelar_clicked();
 
@@ -44,7 +46,6 @@ private:
     QMap<QString, QString> atributosLibro(const QString &codigo);
 
     // cliente
-    QMap<QString, QString> atributosCliente(const QString &codigo);
     bool puedeHacerMasPrestamos(const QString &tipoUsuario, const int cantidad_prestamos);
     void completarInfoCliente(const QString &nombre, const QString &departamento, const QString &tipo);
     void cambiarInfoCliente(const QString &mensaje, bool debeLimpiar);

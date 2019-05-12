@@ -50,6 +50,8 @@ private slots:
 
     void on_botonAgregarClientes_clicked();
 
+    void on_botonMostrarPrestamos_clicked();
+
 private:
     Ui::MainWindow *ui;
     QString codigoEmpleadoActual;

@@ -12,6 +12,7 @@
 #define NUM_COLUMNAS_LIBRO 7
 #define NUM_COLUMNAS_EMPLEADO 7
 #define NUM_COLUMNAS_CLIENTE 8
+#define NUM_COLUMNAS_PRESTAMO 8
 
 MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent) :
     codigoEmpleadoActual(codigoEmpleado),
@@ -518,3 +519,49 @@ void MainWindow::modificarCliente()
 
     on_botonMostrarClientes_clicked();
 }
+
+
+
+
+
+void MainWindow::on_botonMostrarPrestamos_clicked()
+{
+    QString query = "SELECT codigo, titulo, nombre_cliente, nombre_empleado, fecha_prestamo, fecha_entrega,"\
+            "CASE WHEN ejemplar = 1 THEN CONCAT(retraso / 3600, ' horas')"\
+                 "WHEN ejemplar <> 1 THEN CONCAT(retraso / 86400, ' días')"\
+            "END AS retraso2,"\
+            "CASE WHEN ejemplar = 1 THEN (retraso / 3600) * 1"\
+                 "WHEN ejemplar <> 1 THEN (retraso / 86400) * 5"\
+            "END AS penalizacion2"\
+
+            "FROM"\
+
+        "(SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado,"\
+                "fecha_prestamo, fecha_entrega, ejemplar,"\
+            "CASE WHEN EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0"\
+                 "WHEN EXTRACT( EPOCH from now() - fecha_entrega ) > 0 THEN EXTRACT( EPOCH from now() - fecha_entrega )"\
+            "END AS retraso"\
+            "FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro"\
+            "LEFT JOIN cliente ON cliente.codigo=codigo_cliente"\
+            "LEFT JOIN empleado ON empleado.codigo=codigo_empleado) AS temporal";
+
+    llenarTabla(ui->tablePrestamos, ui->lineBuscarPrestamo->text(), query, NUM_COLUMNAS_PRESTAMO);
+}
+
+/*
+SELECT ;
+
+SELECT * , CASE WHEN EXTRACT( days from now() - fecha_entrega ) <= 0 THEN 0
+            WHEN EXTRACT( days from now() - fecha_entrega ) > 0 THEN EXTRACT( days from now() - fecha_entrega )
+            END as retraso,prestamo.retraso*10 as penalizacion from prestamo;
+
+SELECT *, CASE WHEN ejemplar=1 CONCAT(fecha, "dias")
+
+to_timestamp(?, 'dd-mm-yyyy hh24:mi:ss')
+
+CASE WHEN tipo='E' THEN 'Estudiante' "\
+                    "     WHEN tipo='P' THEN 'Profesor' "\
+                    "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
+                    "END AS tipo "\
+
+*/

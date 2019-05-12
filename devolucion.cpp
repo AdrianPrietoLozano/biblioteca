@@ -2,6 +2,7 @@
 #include "devolucion.h"
 #include "ui_devolucion.h"
 #include "infodevolucion.h"
+#include "prestamo.h"
 
 #define COBRO_HORA 1
 #define COBRO_DIA 5
@@ -24,6 +25,7 @@ void Devolucion::on_botonCancelar_clicked()
     close();
 }
 
+/* Retorna un QMap con algunos atributos y valores de un libro */
 QMap<QString, QString> Devolucion::atributosLibro(const QString &codigo)
 {
     QSqlQuery query(db);
@@ -121,30 +123,6 @@ void Devolucion::on_lineEditCodigoLibro_textEdited(const QString &arg1)
 
 
 
-QMap<QString, QString> Devolucion::atributosCliente(const QString &codigo)
-{
-    QSqlQuery query(db);
-    QMap<QString, QString> valores;
-
-    if(db.open())
-    {
-        QString select = "SELECT nombre, departamento, tipo, COUNT(prestamo.codigo_cliente) AS cantidad_prestamos "\
-                "FROM cliente LEFT JOIN prestamo ON cliente.codigo=prestamo.codigo_cliente "\
-                "WHERE cliente.codigo=" + codigo + " GROUP BY cliente.codigo";
-        query.exec(select);
-
-        if(query.next())
-        {
-            valores["nombre"] = query.value("nombre").toString();
-            valores["departamento"] = query.value("departamento").toString();
-            valores["tipo"] = (query.value("tipo").toString() == "E" ? "Estudiante" : "Profesor");
-            valores["cantidad_prestamos"] = query.value("cantidad_prestamos").toString();
-        }
-    }
-
-    return valores;
-}
-
 
 void Devolucion::completarInfoCliente(const QString &nombre, const QString &departamento,
                                     const QString &tipo)
@@ -168,6 +146,8 @@ void Devolucion::cambiarInfoCliente(const QString &mensaje, bool debeLimpiar)
     ui->botonAceptar->setEnabled(false);
 }
 
+
+/* Determina si un cliente solicitó un determinado libro */
 bool Devolucion::clienteSolicitoLibro(const QString &codigoCliente, const QString &codigoLibro)
 {
     QSqlQuery query(db);
@@ -213,6 +193,8 @@ void Devolucion::comprobarDevolucion()
     }
 }
 
+
+
 QString Devolucion::calcularRetraso(const int ejemplar, const QDateTime fecha_entrega)
 {
     QString retraso;
@@ -228,13 +210,12 @@ QString Devolucion::calcularRetraso(const int ejemplar, const QDateTime fecha_en
     }
     else // no es primer ejemplar, se cobra por día
     {
-        int diasRetraso = fecha_entrega.daysTo(QDateTime::currentDateTime());
+        int diasRetraso = fecha_entrega.daysTo(QDateTime::currentDateTime()) - 1;
         if(diasRetraso < 0)
             diasRetraso = 0;
 
         retraso = QString::number(diasRetraso) + " días";
     }
-
 
     return retraso;
 }
@@ -254,7 +235,7 @@ float Devolucion::calcularPenalizacion(const int ejemplar, const QDateTime fecha
     }
     else // no es primer ejemplar, se cobra por día
     {
-        int diasRetraso = fecha_entrega.daysTo(QDateTime::currentDateTime());
+        int diasRetraso = fecha_entrega.daysTo(QDateTime::currentDateTime()) - 1;
         if(diasRetraso < 0)
             diasRetraso = 0;
 
@@ -288,7 +269,7 @@ bool Devolucion::eliminarPrestamo(const QString &codigoLibro, const QString &cod
 
 void Devolucion::on_lineEditCodigoCliente_textEdited(const QString &arg1)
 {
-    QMap<QString, QString> atributos = atributosCliente(arg1);
+    QMap<QString, QString> atributos = Prestamo::atributosCliente(arg1);
 
     if(atributos.size() > 0)
     {

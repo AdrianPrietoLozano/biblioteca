@@ -34,8 +34,7 @@ private:
     const QString insertar = "INSERT INTO cliente(nombre, telefono, departamento, carrera, grado, sexo, tipo) "\
             "VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-    const QString modificar = "UPDATE cliente SET nombre=?, telefono=?, departamento=?, carrera=?, "\
-            "grado=?, sexo=?, tipo=? WHERE codigo=" + codigoCliente;
+    QString modificar;
 
     void procesarCliente(const QString &sentencia, const QString &mensajeError);
     void llenarCampos();

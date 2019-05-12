@@ -36,7 +36,6 @@ private:
 
 
     // Cliente
-    QMap<QString, QString> atributosCliente(const QString &codigo);
     void completarInfoCliente(const QString &nombre, const QString &departamento, const QString &tipo);
     void cambiarInfoCliente(const QString &mensaje, bool debeLimpiar);
     bool clienteSolicitoLibro(const QString &codigoCliente, const QString &codigoLibro);

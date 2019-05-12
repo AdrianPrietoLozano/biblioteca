@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>829</width>
-    <height>541</height>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@ background: none;
 </string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -678,6 +678,170 @@ background-color: rgb(203, 203, 203);</string>
           </property>
           <property name="text">
            <string>Agregar cliente</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabPrestamos">
+       <attribute name="title">
+        <string>Préstamos</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0" colspan="4">
+         <widget class="QTableWidget" name="tablePrestamos">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>787</width>
+            <height>390</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);
+border-radius: 8px;</string>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <column>
+           <property name="text">
+            <string>Código</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Libro</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Cliente</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Empleado</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fecha préstamo</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fecha entrega</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Retraso</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Penalización</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background: none;</string>
+          </property>
+          <property name="text">
+           <string>Buscar por:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBoxPrestamos">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+background-color: rgb(255, 255, 255);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="lineBuscarPrestamo">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border-radius: 8px;
+background-color: none;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="botonMostrarPrestamos">
+          <property name="styleSheet">
+           <string notr="true">border-image: none;
+border: 1px solid rgb(0, 0, 0);
+background-color: rgb(203, 203, 203);</string>
+          </property>
+          <property name="text">
+           <string>Mostrar préstamos</string>
           </property>
          </widget>
         </item>

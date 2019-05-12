@@ -93,21 +93,26 @@ void Prestamo::cambiarInfoLibro(const QString &mensaje, bool debeLimpiar)
 
 QMap<QString, QString> Prestamo::atributosCliente(const QString &codigo)
 {
+    QSqlDatabase db = QSqlDatabase::database("coneccion");
     QSqlQuery query(db);
     QMap<QString, QString> valores;
 
     if(db.open())
     {
-        QString select = "SELECT nombre, departamento, tipo, COUNT(prestamo.codigo_cliente) AS cantidad_prestamos "\
-                "FROM cliente LEFT JOIN prestamo ON cliente.codigo=prestamo.codigo_cliente "\
-                "WHERE cliente.codigo=" + codigo + " GROUP BY cliente.codigo";
+        QString select = "SELECT nombre, departamento, "\
+                         "CASE WHEN tipo='E' THEN 'Estudiante' "\
+                         "     WHEN tipo='P' THEN 'Profesor' "\
+                         "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
+                         "END AS tipo, COUNT(prestamo.codigo_cliente) AS cantidad_prestamos "\
+                         "FROM cliente LEFT JOIN prestamo ON cliente.codigo=prestamo.codigo_cliente "\
+                         "WHERE cliente.codigo=" + codigo + " GROUP BY cliente.codigo";
         query.exec(select);
 
         if(query.next())
         {
             valores["nombre"] = query.value("nombre").toString();
             valores["departamento"] = query.value("departamento").toString();
-            valores["tipo"] = (query.value("tipo").toString() == "E" ? "Estudiante" : "Profesor");
+            valores["tipo"] = query.value("tipo").toString();
             valores["cantidad_prestamos"] = query.value("cantidad_prestamos").toString();
         }
     }
@@ -257,7 +262,7 @@ void Prestamo::on_botonAceptar_clicked()
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_ESTUDIANTE);
             horaEntrega.setTime(horaDeCerrar);
         }
-        else if(tipoUsuario == "Profesor"){
+        else if(tipoUsuario == "Profesor" || tipoUsuario == "Estudiante y profesor"){
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_MAESTRO);
             horaEntrega.setTime(horaDeCerrar);
         }

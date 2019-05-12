@@ -101,18 +101,30 @@ FROM cliente;
 
 
 
-if(tipo == 'E')
-	ui->radioButtonEstudiante->setChecked(true);
+SELECT * , EXTRACT( days from to_timestamp(CAST(fecha_entrega as varchar), 'yyyy-mm-dd') - to_timestamp(CAST(now() AS VARCHAR), 'yyyy-mm-dd') )
+FROM prestamo;
 
-else if(tipo == 'P')
-	ui->radioButtonProfesor->setChecked(true);
 
-else if(tipo == 'A')
-	ui->radioButtonAmbos->setChecked(true);
+SELECT * , EXTRACT( days from fecha_entrega - now() )
+FROM prestamo;
 
-else
-{
-	ui->radioButtonEstudiante->setChecked(false);
-	ui->radioButtonProfesor->setChecked(false);
-	ui->radioButtonAmbos->setChecked(false);
-}
+
+
+SELECT codigo, titulo, nombre_cliente, nombre_empleado, fecha_prestamo, fecha_entrega,
+	CASE WHEN ejemplar = 1 THEN CONCAT(CAST(retraso / 3600 as INT), ' horas')
+		 WHEN ejemplar <> 1 THEN CONCAT(CAST(retraso / 86400 as INT), ' días')
+	END AS retraso2,
+	CASE WHEN ejemplar = 1 THEN (retraso / 3600) * 1
+		 WHEN ejemplar <> 1 THEN (retraso / 86400) * 5
+	END AS penalizacion2
+
+	FROM
+
+(SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado,
+		fecha_prestamo, fecha_entrega, ejemplar,
+	CASE WHEN EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0
+         WHEN EXTRACT( EPOCH from now() - fecha_entrega ) > 0 THEN EXTRACT( EPOCH from now() - fecha_entrega )
+    END AS retraso
+    FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro
+    LEFT JOIN cliente ON cliente.codigo=codigo_cliente
+    LEFT JOIN empleado ON empleado.codigo=codigo_empleado) AS temporal;

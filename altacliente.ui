@@ -394,6 +394,20 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEditNombre</tabstop>
+  <tabstop>lineEditTelefono</tabstop>
+  <tabstop>lineEditDepartamento</tabstop>
+  <tabstop>lineEditCarrera</tabstop>
+  <tabstop>spinBoxGrado</tabstop>
+  <tabstop>radioButtonHombre</tabstop>
+  <tabstop>radioButtonMujer</tabstop>
+  <tabstop>radioButtonEstudiante</tabstop>
+  <tabstop>radioButtonProfesor</tabstop>
+  <tabstop>radioButtonAmbos</tabstop>
+  <tabstop>pushButtonAceptar</tabstop>
+  <tabstop>pushButtonCancelar</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

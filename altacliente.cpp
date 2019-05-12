@@ -14,6 +14,9 @@ AltaCliente::AltaCliente(QWidget *parent, const QString &codigoCliente, int tipo
     this->tipoVentana = tipoVentana;
     this->codigoCliente = codigoCliente;
 
+    modificar = "UPDATE cliente SET nombre=?, telefono=?, departamento=?, carrera=?, "\
+                "grado=?, sexo=?, tipo=? WHERE codigo=" + codigoCliente;
+
     if(tipoVentana == MODIFICAR)
         llenarCampos();
 }
@@ -77,7 +80,10 @@ void AltaCliente::procesarCliente(const QString &sentencia, const QString &mensa
                 close();
             }
             else
+            {
                 QMessageBox::critical(this, "Error", mensajeError);
+                qDebug() << query.lastError();
+            }
         }
     }
 }
