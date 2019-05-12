@@ -29,8 +29,6 @@ SOURCES += \
         dialog.cpp \
     mainwindow.cpp \
     nuevo_libro.cpp \
-    registro.cpp \
-    permiso.cpp \
     modificar.cpp \
     prestamo.cpp \
     infoprestamo.cpp \
@@ -44,8 +42,6 @@ HEADERS += \
         dialog.h \
     mainwindow.h \
     nuevo_libro.h \
-    registro.h \
-    permiso.h \
     modificar.h \
     prestamo.h \
     infoprestamo.h \
@@ -59,8 +55,6 @@ FORMS += \
         dialog.ui \
     mainwindow.ui \
     nuevo_libro.ui \
-    registro.ui \
-    permiso.ui \
     modificar.ui \
     prestamo.ui \
     infoprestamo.ui \

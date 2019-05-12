@@ -70,18 +70,3 @@ void Dialog::on_pushButtonCancelar_clicked()
 {
     close();
 }
-
-void Dialog::on_pushButton_clicked()
-{
-    this->hide();
-
-    p = new permiso(this);
-
-    p->setModal(true);
-    p->exec();
-
-    if(p->result())
-    {
-        this->show();
-    }
-}

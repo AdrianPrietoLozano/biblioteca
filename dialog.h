@@ -22,10 +22,7 @@ public:
 
 private slots:
     void on_pushButtonAceptar_clicked();
-
     void on_pushButtonCancelar_clicked();
-
-    void on_pushButton_clicked();
 
 private:
     Ui::Dialog *ui;

@@ -88,15 +88,15 @@ INSERT INTO empleado(nombre, nombre_usuario, contrasenia, edad, salario,
 
 
 
-SELECT codigo, nombre, telefono, departamento, carrera, grado, 
-CASE WHEN sexo='H' THEN 'Hombre'
-     WHEN sexo='M' THEN 'Mujer'
-END AS sexo,
-CASE WHEN tipo='E' THEN 'Estudiante'
-     WHEN tipo='P' THEN 'Profesor'
-     WHEN tipo='A' THEN 'Estudiante y profesor'
-END AS tipoA
-FROM cliente;
+"SELECT codigo, nombre, telefono, departamento, carrera, grado, sexo, tipo "\
+"FROM (SELECT codigo, nombre, telefono, departamento, carrera, grado, "\
+	"CASE WHEN sexo='H' THEN 'Hombre' "\
+     	"WHEN sexo='M' THEN 'Mujer' "\
+	"END AS sexo, "\
+	"CASE WHEN tipo='E' THEN 'Estudiante' "\
+     	"WHEN tipo='P' THEN 'Profesor' "\
+     	"WHEN tipo='A' THEN 'Ambos' "\
+	"END AS tipo FROM cliente) AS temporal "\
 
 
 
@@ -110,13 +110,14 @@ FROM prestamo;
 
 
 
-SELECT codigo, titulo, nombre_cliente, nombre_empleado, fecha_prestamo, fecha_entrega,
-	CASE WHEN ejemplar = 1 THEN CONCAT(CAST(retraso / 3600 as INT), ' horas')
-		 WHEN ejemplar <> 1 THEN CONCAT(CAST(retraso / 86400 as INT), ' días')
-	END AS retraso2,
-	CASE WHEN ejemplar = 1 THEN (retraso / 3600) * 1
-		 WHEN ejemplar <> 1 THEN (retraso / 86400) * 5
-	END AS penalizacion2
+SELECT codigo, titulo, nombre_cliente, nombre_empleado,
+	to_timestamp(CAST(fecha_prestamo AS VARCHAR), 'yyyy-mm-dd hh24:mi:ss'), to_timestamp(CAST(fecha_entrega AS VARCHAR), 'yyyy-mm-dd hh24:mi:ss'),
+	CASE WHEN ejemplar = 1 THEN CONCAT(TRUNC(retraso / 3600), ' horas')
+		 WHEN ejemplar <> 1 THEN CONCAT(TRUNC(retraso / 86400), ' días')
+	END AS retraso,
+	CASE WHEN ejemplar = 1 THEN CONCAT('$', TRUNC(retraso / 3600) * 1)
+		 WHEN ejemplar <> 1 THEN CONCAT('$', TRUNC(retraso / 86400) * 5)
+	END AS penalizacion
 
 	FROM
 

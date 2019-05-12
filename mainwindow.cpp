@@ -15,12 +15,12 @@
 #define NUM_COLUMNAS_PRESTAMO 8
 
 MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent) :
-    codigoEmpleadoActual(codigoEmpleado),
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     db = QSqlDatabase::database("coneccion");
+    this->codigoEmpleadoActual = codigoEmpleado;
 
     ui->line_Buscar->setPlaceholderText("Buscar");
 
@@ -40,6 +40,9 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
                                  "Grado", "Sexo", "Tipo"};
     ui->comboBoxClientes->addItems(listaClientes);
 
+    QStringList listaPrestamos = {"Código", "Título", "Cliente", "Empleado"};
+    ui->comboBoxPrestamos->addItems(listaPrestamos);
+
     connect(ui->tableEmpleados, SIGNAL(cellPressed(int,int)),
             this, SLOT(mostrarMenuEmpleado()));
 
@@ -58,6 +61,8 @@ void MainWindow::llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
             _query(query);
         else
             query.exec(seleccion);
+
+        qDebug() << query.lastError();
 
         uint numTuplas = query.size();
         tabla->setColumnCount(numColumnas);
@@ -86,6 +91,10 @@ void MainWindow::_query(QSqlQuery &query)
             break;
 
         case 3:
+            consultaPrestamos(query);
+            break;
+
+        case 4:
             consultaEmpleados(query);
             break;
     }
@@ -126,60 +135,44 @@ void MainWindow::consultaLibros(QSqlQuery &query)
 
 void MainWindow::consultaEmpleados(QSqlQuery &query)
 {
-    QString seleccion = "SELECT codigo, nombre, edad, salario, "\
-                        "CASE WHEN sexo='H' THEN 'Hombre' "\
-                        "     WHEN sexo='M' THEN 'Mujer' "\
-                        "END AS sexo, "\
-                        "nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7') " \
-                        "FROM empleado WHERE es_administrador=FALSE AND ";
-
+    QString seleccion = getSeleccionEmpleados();
     QString datoABuscar = ui->lineBuscarEmpleado->text();
     QString complemento;
 
     switch(ui->comboBoxEmpleados->currentIndex())
     {
         case 0:
-            complemento = "CAST(codigo as varchar)='" + datoABuscar +"'";
+            complemento = "AND CAST(codigo as varchar)='" + datoABuscar +"'";
             break;
 
         case 1:
-            complemento = "UPPER(nombre) LIKE UPPER('%" + datoABuscar + "%') ";
+            complemento = "AND UPPER(nombre) LIKE UPPER('%" + datoABuscar + "%') ";
             break;
 
         case 2:
-            complemento = "CAST(edad as varchar)='" + datoABuscar + "'";
+            complemento = "AND CAST(edad as varchar)='" + datoABuscar + "'";
             break;
 
         case 3:
-            complemento = "CAST(salario as varchar)='" + datoABuscar + "'";
+            complemento = "AND CAST(salario as varchar)='" + datoABuscar + "'";
             break;
 
         case 4:
-            complemento = "UPPER(sexo) LIKE UPPER('%" + datoABuscar + "%') ";
+            complemento = "AND UPPER(sexo) LIKE UPPER('%" + datoABuscar + "%') ";
             break;
 
         case 5:
-            complemento = "UPPER(nombre_usuario) LIKE UPPER('%" + datoABuscar + "%') " ;
+            complemento = "AND UPPER(nombre_usuario) LIKE UPPER('%" + datoABuscar + "%') " ;
             break;
     }
 
     seleccion += complemento + " ORDER BY codigo";
     query.exec(seleccion);
-    ui->lineBuscarEmpleado->clear();
 }
 
 void MainWindow::consultaClientes(QSqlQuery &query)
 {
-    QString seleccion = "SELECT codigo, nombre, telefono, departamento, carrera, grado, "\
-                        "CASE WHEN sexo='H' THEN 'Hombre' "\
-                        "     WHEN sexo='M' THEN 'Mujer' "\
-                        "END AS sexo, "\
-                        "CASE WHEN tipo='E' THEN 'Estudiante' "\
-                        "     WHEN tipo='P' THEN 'Profesor' "\
-                        "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
-                        "END AS tipo "\
-                        "FROM cliente ";
-
+    QString seleccion = getSeleccionClientes();
     QString datoABuscar = ui->lineBuscarClientes->text();
     QString complemento;
 
@@ -209,17 +202,45 @@ void MainWindow::consultaClientes(QSqlQuery &query)
             break;
 
         case 6: // sexo
-            complemento = "WHERE sexo='" + datoABuscar + "'";
+            complemento = "WHERE UPPER(sexo) LIKE UPPER('%" + datoABuscar + "%') ";
             break;
 
         case 7: // tipo
-            complemento = "WHERE tipo='" + datoABuscar + "'";
+            complemento = "WHERE UPPER(tipo) LIKE UPPER('%" + datoABuscar + "%') ";
             break;
     }
 
     seleccion += complemento + " ORDER BY codigo";
     query.exec(seleccion);
-    ui->lineBuscarClientes->clear();
+}
+
+void MainWindow::consultaPrestamos(QSqlQuery &query)
+{
+    QString seleccion = getSeleccionPrestamos();
+    QString datoABuscar = ui->lineBuscarPrestamo->text();
+    QString complemento;
+
+    switch(ui->comboBoxPrestamos->currentIndex())
+    {
+        case 0: // código
+            complemento = " WHERE CAST(codigo AS VARCHAR)='" + datoABuscar + "'";
+            break;
+
+        case 1: // titulo libro
+            complemento = " WHERE UPPER(titulo) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+
+        case 2: // nombre cliente
+            complemento = " WHERE UPPER(nombre_cliente) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+
+        case 3: // nombre empleado
+            complemento = " WHERE UPPER(nombre_empleado) LIKE UPPER('%" + datoABuscar + "%') ";
+            break;
+    }
+
+    seleccion += complemento + " ORDER BY codigo";
+    query.exec(seleccion);
 }
 
 void MainWindow::llenarLista(QStringList &a)
@@ -253,11 +274,6 @@ void MainWindow::on_pushButton_2_clicked()
     llenarTabla(ui->tableLibros, ui->line_Buscar->text(), query, NUM_COLUMNAS_LIBRO);
 
     qDebug() << ui->comboBox->currentText();
-}
-
-void MainWindow::on_tabWidget_tabBarClicked(int index)
-{
-    //mostrarLibros();
 }
 
 void MainWindow::on_pushButton_4_clicked()
@@ -329,17 +345,12 @@ void MainWindow::on_botonCerrarSesion_clicked()
     this->close();
 
     Dialog *ventanInicioSesion = new Dialog();
-    ventanInicioSesion->show();
+    ventanInicioSesion->exec();
 }
 
 void MainWindow::on_botonMostrarEmpleados_clicked()
 {
-    QString query = "SELECT codigo, nombre, edad, salario, "\
-                    "CASE WHEN sexo='H' THEN 'Hombre'"\
-                    "     WHEN sexo='M' THEN 'Mujer'"\
-                    "END AS sexo, "\
-                    "nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7')" \
-                    "FROM empleado WHERE es_administrador=FALSE ORDER BY codigo";
+    QString query = getSeleccionEmpleados() += " ORDER BY codigo";
 
     llenarTabla(ui->tableEmpleados, ui->lineBuscarEmpleado->text(), query, NUM_COLUMNAS_EMPLEADO);
 }
@@ -483,15 +494,7 @@ void MainWindow::mostrarMenuCliente()
 
 void MainWindow::on_botonMostrarClientes_clicked()
 {
-    QString query = "SELECT codigo, nombre, telefono, departamento, carrera, grado, "\
-                    "CASE WHEN sexo='H' THEN 'Hombre' "\
-                    "     WHEN sexo='M' THEN 'Mujer' "\
-                    "END AS sexo, "\
-                    "CASE WHEN tipo='E' THEN 'Estudiante' "\
-                    "     WHEN tipo='P' THEN 'Profesor' "\
-                    "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
-                    "END AS tipo "\
-                    "FROM cliente ORDER BY codigo";
+    QString query = getSeleccionClientes() += " ORDER BY codigo";
 
     llenarTabla(ui->tableClientes, ui->lineBuscarClientes->text(), query, NUM_COLUMNAS_CLIENTE);
 }
@@ -521,47 +524,26 @@ void MainWindow::modificarCliente()
 }
 
 
+QString MainWindow::getSeleccionPrestamos()
+{
+    return seleccionPrestamos;
+}
 
+QString MainWindow::getSeleccionEmpleados()
+{
+    return seleccionEmpleados;
+}
+
+QString MainWindow::getSeleccionClientes()
+{
+    return seleccionClientes;
+}
 
 
 void MainWindow::on_botonMostrarPrestamos_clicked()
 {
-    QString query = "SELECT codigo, titulo, nombre_cliente, nombre_empleado, fecha_prestamo, fecha_entrega,"\
-            "CASE WHEN ejemplar = 1 THEN CONCAT(retraso / 3600, ' horas')"\
-                 "WHEN ejemplar <> 1 THEN CONCAT(retraso / 86400, ' días')"\
-            "END AS retraso2,"\
-            "CASE WHEN ejemplar = 1 THEN (retraso / 3600) * 1"\
-                 "WHEN ejemplar <> 1 THEN (retraso / 86400) * 5"\
-            "END AS penalizacion2"\
+    QString query = getSeleccionPrestamos() += " ORDER BY codigo";
 
-            "FROM"\
-
-        "(SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado,"\
-                "fecha_prestamo, fecha_entrega, ejemplar,"\
-            "CASE WHEN EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0"\
-                 "WHEN EXTRACT( EPOCH from now() - fecha_entrega ) > 0 THEN EXTRACT( EPOCH from now() - fecha_entrega )"\
-            "END AS retraso"\
-            "FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro"\
-            "LEFT JOIN cliente ON cliente.codigo=codigo_cliente"\
-            "LEFT JOIN empleado ON empleado.codigo=codigo_empleado) AS temporal";
 
     llenarTabla(ui->tablePrestamos, ui->lineBuscarPrestamo->text(), query, NUM_COLUMNAS_PRESTAMO);
 }
-
-/*
-SELECT ;
-
-SELECT * , CASE WHEN EXTRACT( days from now() - fecha_entrega ) <= 0 THEN 0
-            WHEN EXTRACT( days from now() - fecha_entrega ) > 0 THEN EXTRACT( days from now() - fecha_entrega )
-            END as retraso,prestamo.retraso*10 as penalizacion from prestamo;
-
-SELECT *, CASE WHEN ejemplar=1 CONCAT(fecha, "dias")
-
-to_timestamp(?, 'dd-mm-yyyy hh24:mi:ss')
-
-CASE WHEN tipo='E' THEN 'Estudiante' "\
-                    "     WHEN tipo='P' THEN 'Profesor' "\
-                    "     WHEN tipo='A' THEN 'Estudiante y profesor' "\
-                    "END AS tipo "\
-
-*/
