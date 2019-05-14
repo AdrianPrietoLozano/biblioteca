@@ -82,7 +82,9 @@ private:
                                         "WHEN tipo='A' THEN 'Ambos' "\
                                     "END AS tipo FROM cliente) AS temporal ";
 
-    QString seleccionPrestamos = "SELECT codigo, titulo, nombre_cliente, nombre_empleado, fecha_prestamo, fecha_entrega, "\
+    QString seleccionPrestamos = "SELECT codigo, titulo, nombre_cliente, nombre_empleado, "\
+                        "to_char(fecha_prestamo, 'dd-mm-yyyy,  hh24:mi AM'), "\
+                        "to_char(fecha_entrega, 'dd-mm-yyyy,  hh24:mi AM'), "\
                         "CASE WHEN ejemplar = 1 THEN CONCAT(TRUNC(retraso / 3600), ' horas') "\
                              "WHEN ejemplar <> 1 THEN CONCAT(TRUNC(retraso / 86400), ' días') "\
                         "END AS retraso2, "\
@@ -94,8 +96,9 @@ private:
 
                     "(SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado, "\
                             "fecha_prestamo, fecha_entrega, ejemplar, "\
-                        "CASE WHEN EXTRACT(EPOCH from now() - fecha_entrega) <= 0 THEN 0 "\
-                             "WHEN EXTRACT(EPOCH from now() - fecha_entrega) > 0 THEN EXTRACT(EPOCH from now() - fecha_entrega) "\
+                        "CASE WHEN EXTRACT(EPOCH from now() - (fecha_entrega - interval '24 hours')) <= 0 THEN 0 "\
+                             "WHEN EXTRACT(EPOCH from now() - (fecha_entrega - interval '24 hours')) > 0 THEN "\
+                                "EXTRACT(EPOCH from now() - (fecha_entrega - interval '24 hours')) "\
                         "END AS retraso "\
                         "FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro "\
                         "LEFT JOIN cliente ON cliente.codigo=codigo_cliente "\

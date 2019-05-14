@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include "mainwindow.h"
-#include "permiso.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -27,7 +26,6 @@ private slots:
 private:
     Ui::Dialog *ui;
     MainWindow *principal;
-    permiso *p;
 };
 
 #endif // DIALOG_H

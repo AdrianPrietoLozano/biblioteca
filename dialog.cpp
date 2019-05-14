@@ -50,8 +50,6 @@ void Dialog::on_pushButtonAceptar_clicked()
         query.bindValue(1, CLAVE);
         query.bindValue(2, contrasenia);
 
-        qDebug() << query.lastQuery();
-
         query.exec();
 
         if(query.next())

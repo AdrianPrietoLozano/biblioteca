@@ -109,9 +109,20 @@ SELECT * , EXTRACT( days from fecha_entrega - now() )
 FROM prestamo;
 
 
+ update prestamo set fecha_entrega= timestamp '2019-05-12 21:54:23';
+
+
+
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+VALUES (5, 1, 1, timestamp '2019-05-11 21:34:23', timestamp '2019-05-11 21:34:23');
+
+
+
+
 
 SELECT codigo, titulo, nombre_cliente, nombre_empleado,
-	to_timestamp(CAST(fecha_prestamo AS VARCHAR), 'yyyy-mm-dd hh24:mi:ss'), to_timestamp(CAST(fecha_entrega AS VARCHAR), 'yyyy-mm-dd hh24:mi:ss'),
+	to_char(fecha_prestamo, 'dd-mm-yyyy,  hh24:mi AM'),
+	to_char(fecha_entrega, 'dd-mm-yyyy,  hh24:mi AM'),
 	CASE WHEN ejemplar = 1 THEN CONCAT(TRUNC(retraso / 3600), ' horas')
 		 WHEN ejemplar <> 1 THEN CONCAT(TRUNC(retraso / 86400), ' días')
 	END AS retraso,
@@ -123,8 +134,9 @@ SELECT codigo, titulo, nombre_cliente, nombre_empleado,
 
 (SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado,
 		fecha_prestamo, fecha_entrega, ejemplar,
-	CASE WHEN EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0
-         WHEN EXTRACT( EPOCH from now() - fecha_entrega ) > 0 THEN EXTRACT( EPOCH from now() - fecha_entrega )
+	CASE WHEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) <= 0 THEN 0
+         WHEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) > 0
+         	THEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') )
     END AS retraso
     FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro
     LEFT JOIN cliente ON cliente.codigo=codigo_cliente
