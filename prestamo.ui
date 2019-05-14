@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>360</width>
-    <height>413</height>
+    <width>380</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>360</width>
-    <height>413</height>
+    <width>380</width>
+    <height>456</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>360</width>
-    <height>413</height>
+    <width>380</width>
+    <height>456</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,15 +28,17 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>91</width>
+     <x>40</x>
+     <y>80</y>
+     <width>98</width>
      <height>16</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -46,15 +48,17 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>200</y>
-     <width>101</width>
+     <x>20</x>
+     <y>260</y>
+     <width>113</width>
      <height>16</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -64,15 +68,17 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>70</y>
-     <width>31</width>
-     <height>16</height>
+     <x>100</x>
+     <y>130</y>
+     <width>35</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -82,15 +88,17 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>100</y>
-     <width>31</width>
-     <height>16</height>
+     <x>100</x>
+     <y>160</y>
+     <width>36</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -100,15 +108,17 @@
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>130</y>
-     <width>51</width>
-     <height>16</height>
+     <x>80</x>
+     <y>190</y>
+     <width>52</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -118,15 +128,17 @@
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>160</y>
-     <width>31</width>
-     <height>16</height>
+     <x>100</x>
+     <y>220</y>
+     <width>29</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -136,15 +148,17 @@
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>250</y>
-     <width>51</width>
-     <height>16</height>
+     <x>90</x>
+     <y>310</y>
+     <width>47</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -154,15 +168,17 @@
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>280</y>
-     <width>41</width>
-     <height>16</height>
+     <x>100</x>
+     <y>340</y>
+     <width>35</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -172,15 +188,17 @@
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>310</y>
-     <width>31</width>
-     <height>16</height>
+     <x>110</x>
+     <y>370</y>
+     <width>26</width>
+     <height>14</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
@@ -193,8 +211,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>70</y>
+     <x>140</x>
+     <y>130</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -206,8 +224,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>100</y>
+     <x>140</x>
+     <y>160</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -219,8 +237,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>130</y>
+     <x>140</x>
+     <y>190</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -232,8 +250,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>160</y>
+     <x>140</x>
+     <y>220</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -245,8 +263,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>250</y>
+     <x>140</x>
+     <y>310</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -258,8 +276,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>280</y>
+     <x>140</x>
+     <y>340</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -271,8 +289,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>310</y>
+     <x>140</x>
+     <y>370</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -281,8 +299,8 @@
   <widget class="QLabel" name="labelLibro">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>40</y>
+     <x>140</x>
+     <y>100</y>
      <width>221</width>
      <height>16</height>
     </rect>
@@ -294,8 +312,8 @@
   <widget class="QLabel" name="labelCliente">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>220</y>
+     <x>130</x>
+     <y>280</y>
      <width>221</width>
      <height>16</height>
     </rect>
@@ -307,8 +325,8 @@
   <widget class="QLineEdit" name="lineEditCodigoLibro">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>20</y>
+     <x>140</x>
+     <y>80</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -317,8 +335,8 @@
   <widget class="QLineEdit" name="lineEditCodigoCliente">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>200</y>
+     <x>140</x>
+     <y>260</y>
      <width>221</width>
      <height>20</height>
     </rect>
@@ -330,8 +348,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>380</y>
+     <x>120</x>
+     <y>420</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -343,8 +361,8 @@
   <widget class="QPushButton" name="botonCancelar">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>380</y>
+     <x>210</x>
+     <y>420</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -353,7 +371,40 @@
     <string>Cancelar</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>20</y>
+     <width>130</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Préstamo</string>
+   </property>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEditCodigoLibro</tabstop>
+  <tabstop>lineEditCodigoCliente</tabstop>
+  <tabstop>botonAceptar</tabstop>
+  <tabstop>botonCancelar</tabstop>
+  <tabstop>lineEditTitulo</tabstop>
+  <tabstop>lineEditAutor</tabstop>
+  <tabstop>lineEditEjemplar</tabstop>
+  <tabstop>lineEditIsbn</tabstop>
+  <tabstop>lineEditNombre</tabstop>
+  <tabstop>lineEditDpto</tabstop>
+  <tabstop>lineEditTipo</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

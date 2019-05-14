@@ -45,6 +45,7 @@ private:
     QString calcularRetraso(const int ejemplar, const QDateTime fecha_entrega);
     float calcularPenalizacion(const int ejemplar, const QDateTime fecha_entrega);
     bool eliminarPrestamo(const QString &codigoLibro, const QString &codigoCliente);
+    void generarRecibo(const QString &codigoPrestamo, const QString &retraso, const QString &penalizacion);
 
     QTime getHoraCerrar()
     {

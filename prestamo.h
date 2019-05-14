@@ -57,7 +57,7 @@ private:
 
     QTime getHoraCerrar()
     {
-        if(QDate::currentDate().dayOfWeek() == 6) // es sabado
+        if(QDate::currentDate().dayOfWeek() == Qt::Saturday) // es sabado
             return QTime(14, 0); // se cierra a las 2pm el sábado
         else
             return QTime(17, 0); // se ciera a las 5pm de lunes a viernes

@@ -117,7 +117,7 @@ INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_presta
 VALUES (5, 1, 1, timestamp '2019-05-11 21:34:23', timestamp '2019-05-11 21:34:23');
 
 
-
+//----------------------------------------------------------------------------
 
 
 SELECT codigo, titulo, nombre_cliente, nombre_empleado,
@@ -141,3 +141,13 @@ SELECT codigo, titulo, nombre_cliente, nombre_empleado,
     FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro
     LEFT JOIN cliente ON cliente.codigo=codigo_cliente
     LEFT JOIN empleado ON empleado.codigo=codigo_empleado) AS temporal;
+
+
+//----------------------------------------------------------------------------
+
+"SELECT L.titulo, L.ejemplar, C.nombre, CASE WHEN C.tipo='E' THEN 'Estudiante' "\
+     	"WHEN C.tipo='P' THEN 'Profesor' "\
+     	"WHEN C.tipo='A' THEN 'Estudiante y profesor' END AS tipo, fecha_entrega "\
+"FROM prestamo AS P LEFT JOIN libro AS L ON L.codigo=codigo_libro "\
+			"LEFT JOIN cliente AS C ON C.codigo=codigo_cliente "\
+"WHERE P.codigo=?";

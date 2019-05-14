@@ -312,6 +312,16 @@ usuario</string>
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lineEditNombre</tabstop>
+  <tabstop>spinBoxEdad</tabstop>
+  <tabstop>doubleSpinBoxSalario</tabstop>
+  <tabstop>lineEditUsuario</tabstop>
+  <tabstop>lineEditContrasenia</tabstop>
+  <tabstop>lineEditCodigo</tabstop>
+  <tabstop>radioButtonHombre</tabstop>
+  <tabstop>radioButtonMujer</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

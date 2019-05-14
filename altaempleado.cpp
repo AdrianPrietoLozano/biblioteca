@@ -23,14 +23,13 @@ void AltaEmpleado::on_pushButtonAceptar_clicked()
 
     if(db.open())
     {
-        QString select = "SELECT * FROM empleado WHERE nombre=? OR nombre_usuario=?";
+        QString select = "SELECT * FROM empleado WHERE nombre_usuario=?";
         query.prepare(select);
-        query.bindValue(0, ui->lineEditNombre->text());
-        query.bindValue(1, ui->lineEditUsuario->text());
+        query.bindValue(0, ui->lineEditUsuario->text());
         query.exec();
 
         if(query.next()) // ya existe el empleado
-            QMessageBox::critical(this, "Error", "Error: ya existe el empleado");
+            QMessageBox::critical(this, "Error", "Ya existe un empleado con ese nombre de usuario");
         else
         {
             if(ui->lineEditContrasenia->text() == ui->lineEditRepiteContrasenia->text()) // las contr. coinciden

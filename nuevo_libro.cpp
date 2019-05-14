@@ -32,7 +32,7 @@ void nuevo_libro::on_botonFinalizar_clicked()
         query.prepare(select);
         query.bindValue(0, ui->lineEditIsbn->text());
         query.bindValue(1, ui->lineEditTitulo->text());
-        query.bindValue(2, ui->lineEditEjemplar->text());
+        query.bindValue(2, ui->spinBoxEjemplar->value());
         query.exec();
 
         if(query.next()) // si ya existe el libro
@@ -61,8 +61,8 @@ bool nuevo_libro::insertarLibro()
         query.bindValue(1, ui->lineEditTitulo->text());
         query.bindValue(2, ui->lineEditAutor->text());
         query.bindValue(3, ui->lineEditEditorial->text());
-        query.bindValue(4, ui->lineEditEjemplar->text());
-        query.bindValue(5, ui->lineEditAnio->text());
+        query.bindValue(4, ui->spinBoxEjemplar->value());
+        query.bindValue(5, ui->spinBoxAnio->value());
 
         if(query.exec())
         {

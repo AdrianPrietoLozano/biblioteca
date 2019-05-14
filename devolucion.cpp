@@ -1,4 +1,8 @@
 #include <QMessageBox>
+#include <QtPrintSupport/QPrinter>
+#include <QPainter>
+#include <QPdfWriter>
+
 #include "devolucion.h"
 #include "ui_devolucion.h"
 #include "infodevolucion.h"
@@ -13,6 +17,8 @@ Devolucion::Devolucion(QWidget *parent) :
 {
     ui->setupUi(this);
     db = QSqlDatabase::database("coneccion");
+
+    generarRecibo("28", "4 horas", "$23.00");
 }
 
 Devolucion::~Devolucion()
@@ -269,6 +275,65 @@ bool Devolucion::eliminarPrestamo(const QString &codigoLibro, const QString &cod
     return false;
 }
 
+void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &retraso,
+                               const QString &penalizacion)
+{
+    QString select = "SELECT L.titulo AS titulo, L.ejemplar AS ejemplar, C.nombre AS nombre, "\
+                     "CASE WHEN C.tipo='E' THEN 'Estudiante' "\
+                     "WHEN C.tipo='P' THEN 'Profesor' "\
+                     "WHEN C.tipo='A' THEN 'Estudiante y profesor' END AS tipo, fecha_entrega "\
+                    "FROM prestamo AS P LEFT JOIN libro AS L ON L.codigo=codigo_libro "\
+                         "LEFT JOIN cliente AS C ON C.codigo=codigo_cliente "\
+                     "WHERE P.codigo=" + codigoPrestamo;
+
+
+    QSqlQuery query(db);
+    if(db.open())
+    {
+        query.exec(select);
+
+        if(query.next())
+        {
+            QPdfWriter pdf("C:/Users/abc/Desktop/Bases de datos/biblioteca/recibos/prueba.pdf");
+            //pdf.setPageSize(QPagedPaintDevice::);
+            pdf.setPageSizeMM(QSizeF(100, 100));
+            pdf.setPageMargins(QMargins(5, 5, 5, 5));
+
+            QPainter painter(&pdf);
+            QFont negritas = QFont("times", -1, QFont::Bold);
+
+            painter.setPen(Qt::blue);
+            painter.setFont(negritas);
+            painter.drawText(600, 20, "Biblioteca Héctor Prieto");
+            painter.setPen(Qt::black);
+            painter.drawText(100, 300, "Título del libro: ");
+            painter.drawText(100, 500, "Núm. ejemplar: ");
+            painter.drawText(100, 700, "Nombre del cliente: ");
+            painter.drawText(100, 900, "Tipo de cliente: ");
+            painter.drawText(100, 1100, "Fecha original de entrega: ");
+            painter.drawText(100, 1300, "Fecha en que se entrego: ");
+            painter.drawText(100, 1500, "Retraso: ");
+            painter.drawText(100, 1700, "Penalización: ");
+
+            painter.setFont(QFont());
+            painter.drawText(2000, 300, query.value("titulo").toString());
+            painter.drawText(2000, 500, query.value("ejemplar").toString());
+            painter.drawText(2000, 700, query.value("nombre").toString());
+            painter.drawText(2000, 900, query.value("tipo").toString());
+            painter.drawText(2000, 1100, query.value("fecha_entrega").toDateTime().toString("dd-MM-yyyy,  hh:mm:ss"));
+            painter.drawText(2000, 1300, QDateTime::currentDateTime().toString("dd-MM-yyyy,  hh:mm:ss"));
+            painter.drawText(2000, 1500, retraso);
+            painter.setPen(Qt::red);
+            painter.drawText(2000, 1700, penalizacion);
+
+            painter.end();
+
+            return;
+        }
+    }
+    QMessageBox::critical(this, "Error", "Ocurrio un error al crear el recibo");
+}
+
 
 void Devolucion::on_lineEditCodigoCliente_textEdited(const QString &arg1)
 {
@@ -302,7 +367,8 @@ void Devolucion::on_botonAceptar_clicked()
 
         if(db.open())
         {
-            QString select = "SELECT ejemplar, fecha_entrega FROM prestamo, libro WHERE codigo_libro=? AND libro.codigo=?";
+            QString select = "SELECT prestamo.codigo, ejemplar, fecha_entrega FROM prestamo, libro "\
+                    "WHERE codigo_libro=? AND libro.codigo=?";
             query.prepare(select);
             query.bindValue(0, codigoLibro);
             query.bindValue(1, codigoLibro);
@@ -319,6 +385,8 @@ void Devolucion::on_botonAceptar_clicked()
                                               query.value("fecha_entrega").toDateTime());
 
                     // FALTA GENERAR RECIBO
+                    // ¿Qué nombre se le pondrá la recibo?
+                    generarRecibo(query.value("codigo").toString(), retraso, QString::number(penalizacion));
                 }
 
                 eliminarPrestamo(codigoLibro, codigoCliente);

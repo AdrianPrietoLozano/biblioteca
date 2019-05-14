@@ -48,6 +48,7 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
 
     connect(ui->tableClientes, SIGNAL(cellPressed(int,int)),
             this, SLOT(mostrarMenuCliente()));
+
 }
 
 void MainWindow::llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
@@ -302,7 +303,7 @@ bool MainWindow::estaATiempo()
     int diaActual = QDate::currentDate().dayOfWeek();
     QTime horaActual = QTime::currentTime();
 
-    if(diaActual >= 1 && diaActual <= 6) // dia actual entre lunes-sabado
+    if(diaActual >= Qt::Monday && diaActual <= Qt::Saturday) // dia actual entre lunes-sabado
         if(horaActual >= horaAbrir() && horaActual <= horaCerrar())
             return true;
     return false;
@@ -312,10 +313,10 @@ QTime MainWindow::horaCerrar()
 {
     int diaActual = QDate::currentDate().dayOfWeek();
 
-    if(diaActual >= 1 && diaActual <= 5) // lun-viernes
+    if(diaActual >= Qt::Monday && diaActual <= Qt::Friday) // lun-viernes
         return QTime(17, 0); // lun-viernes cierra a las 5pm
 
-    if(diaActual == 6)
+    if(diaActual == Qt::Saturday)
         return QTime(14, 0); // sábado cierra a las 2pm
 
     return QTime(0, 0); // domingo no abre
