@@ -81,7 +81,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Nombre:</string>
+       <string>Usuario</string>
       </property>
       <property name="scaledContents">
        <bool>false</bool>
