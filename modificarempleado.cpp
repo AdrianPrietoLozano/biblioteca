@@ -23,7 +23,7 @@ void ModificarEmpleado::on_buttonBox_accepted()
     QString sexo;
 
     if(existeEmpleado())
-        QMessageBox::critical(this, "Error", "Ya existe un empleado con ese nombre o nombre de usuario");
+        QMessageBox::critical(this, "Error", "Ya existe un empleado con ese nombre de usuario");
     else
     {
         if(db.open())
@@ -48,12 +48,14 @@ void ModificarEmpleado::on_buttonBox_accepted()
             query.bindValue(6, ui->lineEditCodigo->text());
 
             if(query.exec())
+            {
                 db.commit();
+                close();
+            }
             else
                 QMessageBox::critical(this, "Error", "Ocurrio un error al modificar el empleado");
         }
     }
-    close();
 }
 
 void ModificarEmpleado::on_buttonBox_rejected()
@@ -90,7 +92,6 @@ void ModificarEmpleado::llenarCampos(const QString &codigoEmpleado)
 
 bool ModificarEmpleado::existeEmpleado()
 {
-    QString nombre = ui->lineEditNombre->text();
     QString nombreUsuario = ui->lineEditUsuario->text();
     QString codigo = ui->lineEditCodigo->text();
 
@@ -98,11 +99,10 @@ bool ModificarEmpleado::existeEmpleado()
 
     if(db.open())
     {
-        QString select = "SELECT * FROM empleado WHERE (nombre=? OR nombre_usuario=?) AND codigo!=?";
+        QString select = "SELECT * FROM empleado WHERE nombre_usuario=? AND codigo!=?";
         query.prepare(select);
-        query.bindValue(0, nombre);
-        query.bindValue(1, nombreUsuario);
-        query.bindValue(2, codigo);
+        query.bindValue(0, nombreUsuario);
+        query.bindValue(1, codigo);
         query.exec();
 
         if(!query.next()) //si no existe el empleado

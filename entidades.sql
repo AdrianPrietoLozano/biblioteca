@@ -134,14 +134,27 @@ SELECT codigo, titulo, nombre_cliente, nombre_empleado,
 
 (SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado,
 		fecha_prestamo, fecha_entrega, ejemplar,
-	CASE WHEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) <= 0 THEN 0
-         WHEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) > 0
-         	THEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') )
-    END AS retraso
+	CASE 
+		WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0
+		WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) > 0
+			THEN EXTRACT( EPOCH from now() - fecha_entrega )
+		WHEN ejemplar <> 1 AND EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) <= 0 THEN 0
+		WHEN ejemplar <> 1 AND EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) > 0
+			THEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') )
+	END AS retraso	
     FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro
     LEFT JOIN cliente ON cliente.codigo=codigo_cliente
     LEFT JOIN empleado ON empleado.codigo=codigo_empleado) AS temporal;
 
+
+"CASE "\
+	"WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0 "\
+	"WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) > 0 "\
+		"THEN EXTRACT( EPOCH from now() - fecha_entrega ) "\
+	"WHEN ejemplar <> 1 AND EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) <= 0 THEN 0 "\
+	"WHEN ejemplar <> 1 AND EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) > 0 "\
+		"THEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) "\
+"END AS retraso	 "\
 
 //----------------------------------------------------------------------------
 
@@ -151,3 +164,122 @@ SELECT codigo, titulo, nombre_cliente, nombre_empleado,
 "FROM prestamo AS P LEFT JOIN libro AS L ON L.codigo=codigo_libro "\
 			"LEFT JOIN cliente AS C ON C.codigo=codigo_cliente "\
 "WHERE P.codigo=?";
+
+
+
+UPDATE prestamo SET fecha_entrega=timestamp '01-03-2019 17:00:00' WHERE codigo=26;
+UPDATE prestamo SET fecha_entrega=timestamp '11-04-2019 20:00:00' WHERE codigo=27;
+UPDATE prestamo SET fecha_entrega=timestamp '30-05-2019 20:30:00' WHERE codigo=28;
+UPDATE prestamo SET fecha_entrega=timestamp '01-01-2019 17:00:00' WHERE codigo=29;
+UPDATE prestamo SET fecha_entrega=timestamp '06-06-2017 17:00:00' WHERE codigo=30;
+UPDATE prestamo SET fecha_entrega=timestamp '12-12-2018 17:00:00' WHERE codigo=31;
+UPDATE prestamo SET fecha_entrega=timestamp '12-12-2010 17:00:00' WHERE codigo=54;
+
+
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+VALUES (7, 1, 1, timestamp '2019-05-11 12:34:23', timestamp '2019-05-11 17:00:00');
+
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 1, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 2, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 3, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 4, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 5, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 6, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 7, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 8, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 9, 2007),
+	('978-84-7829-085', 'Fundamentos de Sistemas de Bases de Datos', 'Ramez Elmasri, Shamkant B. Navathe', 'Pearson educación', 10, 2007);
+	
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 1, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 2, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 3, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 4, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 5, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 6, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 7, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 8, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 9, 1986),
+	('9786073157063', 'It', 'Stephen King', 'Viking Press', 10, 1986);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 1, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 2, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 3, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 4, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 5, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 6, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 7, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 8, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 8, 2012),
+	('978-607-481-826-0', 'Precálculo Matemáticas para el cálculo', 'James Stewart, Lothar Redlin, Saleem Watson', 'CENAGAGE Learning', 10, 2012);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 1, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 2, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 3, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 4, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 5, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 6, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 7, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 8, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 9, 2015),
+	('9786070731747', 'Luna de Pluton', 'Angel David', 'Planeta', 10, 2015);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 1, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 2, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 3, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 4, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 5, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 6, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 7, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 8, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 9, 2012),
+	('9789876124232', 'Mazzer Runner', 'James Dashner', 'V y R', 10, 2012);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 1, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 2, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 3, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 4, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 5, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 6, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 7, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 8, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 9, 1982),
+	('7531689426538', 'La Torre Oscura', 'Stephen King', 'Donald M. Grant', 10, 1982);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 1, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 2, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 3, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 4, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 5, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 6, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 7, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 8, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 9, 2012),
+	('978-607-15-0760-0', 'Álgebra Lineal', 'Stanley I. Grossman S., José Job Flores Godoy', 'McGraw-Hill', 10, 2012);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 1, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 2, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 3, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 4, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 5, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 6, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 7, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 8, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 9, 2016),
+	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 10, 2016);

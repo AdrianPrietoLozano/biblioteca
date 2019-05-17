@@ -89,17 +89,21 @@ private:
                              "WHEN ejemplar <> 1 THEN CONCAT(TRUNC(retraso / 86400), ' días') "\
                         "END AS retraso2, "\
                         "CASE WHEN ejemplar = 1 THEN CONCAT('$', TRUNC(retraso / 3600) * 1) "\
-                                 "WHEN ejemplar <> 1 THEN CONCAT('$', TRUNC(retraso / 86400) * 5) "\
+                             "WHEN ejemplar <> 1 THEN CONCAT('$', TRUNC(retraso / 86400) * 5) "\
                         "END AS penalizacion2 "\
 
                         "FROM "\
 
                     "(SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado, "\
-                            "fecha_prestamo, fecha_entrega, ejemplar, "\
-                        "CASE WHEN EXTRACT(EPOCH from now() - (fecha_entrega - interval '24 hours')) <= 0 THEN 0 "\
-                             "WHEN EXTRACT(EPOCH from now() - (fecha_entrega - interval '24 hours')) > 0 THEN "\
-                                "EXTRACT(EPOCH from now() - (fecha_entrega - interval '24 hours')) "\
-                        "END AS retraso "\
+                        "fecha_prestamo, fecha_entrega, ejemplar, "\
+                        "CASE "\
+                            "WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0 "\
+                            "WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) > 0 "\
+                                "THEN EXTRACT( EPOCH from now() - fecha_entrega ) "\
+                            "WHEN ejemplar <> 1 AND EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) <= 0 THEN 0 "\
+                            "WHEN ejemplar <> 1 AND EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) > 0 "\
+                                "THEN EXTRACT( EPOCH from now() - (fecha_entrega - interval '24 hours') ) "\
+                        "END AS retraso	"\
                         "FROM prestamo LEFT JOIN libro ON libro.codigo=codigo_libro "\
                         "LEFT JOIN cliente ON cliente.codigo=codigo_cliente "\
                         "LEFT JOIN empleado ON empleado.codigo=codigo_empleado) AS temporal ";

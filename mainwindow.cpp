@@ -169,6 +169,8 @@ void MainWindow::consultaEmpleados(QSqlQuery &query)
 
     seleccion += complemento + " ORDER BY codigo";
     query.exec(seleccion);
+
+    ui->lineBuscarEmpleado->clear();
 }
 
 void MainWindow::consultaClientes(QSqlQuery &query)
@@ -213,6 +215,8 @@ void MainWindow::consultaClientes(QSqlQuery &query)
 
     seleccion += complemento + " ORDER BY codigo";
     query.exec(seleccion);
+
+    ui->lineBuscarClientes->clear();
 }
 
 void MainWindow::consultaPrestamos(QSqlQuery &query)
@@ -242,6 +246,8 @@ void MainWindow::consultaPrestamos(QSqlQuery &query)
 
     seleccion += complemento + " ORDER BY codigo";
     query.exec(seleccion);
+
+    ui->lineBuscarPrestamo->clear();
 }
 
 void MainWindow::llenarLista(QStringList &a)
@@ -415,11 +421,9 @@ bool MainWindow::clienteTienePendientes(const QString &codigoCliente)
         QSqlQuery query(db);
 
         QString select = "SELECT * FROM prestamo WHERE codigo_cliente=" + codigoCliente;
-        qDebug() << select;
         query.exec(select);
-        qDebug() << query.lastError();
 
-        return query.next();
+        return query.next(); // si hay tuplas significa que ha solicitado algún libro
     }
     return true;
 }

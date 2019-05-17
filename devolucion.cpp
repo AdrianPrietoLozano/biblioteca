@@ -17,8 +17,6 @@ Devolucion::Devolucion(QWidget *parent) :
 {
     ui->setupUi(this);
     db = QSqlDatabase::database("coneccion");
-
-    generarRecibo("45", "4 horas", "$23.00");
 }
 
 Devolucion::~Devolucion()
@@ -244,7 +242,7 @@ float Devolucion::calcularPenalizacion(const int ejemplar, const QDateTime fecha
     }
     else // no es primer ejemplar, se cobra por día
     {
-        int diasRetraso = fecha_entrega.date().daysTo(QDate::currentDate());
+        int diasRetraso = fecha_entrega.date().daysTo(QDate::currentDate()) + 1;
         if(diasRetraso < 0)
             diasRetraso = 0;
 
@@ -294,7 +292,7 @@ void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &ret
 
         if(query.next())
         {
-            QPdfWriter pdf("C:/Users/abc/Desktop/Bases de datos/biblioteca/recibos/prueba.pdf");
+            QPdfWriter pdf("C:/Users/abc/Desktop/Bases de datos/biblioteca/recibos/" + codigoPrestamo + ".pdf");
             //pdf.setPageSize(QPagedPaintDevice::);
             pdf.setPageSizeMM(QSizeF(100, 100));
             pdf.setPageMargins(QMargins(0, 0, 0, 0));
