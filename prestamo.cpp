@@ -245,8 +245,7 @@ void Prestamo::mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTim
 
 void Prestamo::on_botonAceptar_clicked()
 {
-    //QTime::currentTime() <= horaDeCerrar
-    if(true)
+    if(QTime::currentTime() <= horaDeCerrar)
     {
         QString codigoLibro = ui->lineEditCodigoLibro->text();
         QString codigoCliente = ui->lineEditCodigoCliente->text();
@@ -258,14 +257,12 @@ void Prestamo::on_botonAceptar_clicked()
 
         if(ejemplar == 1) // es primer ejemplar, solo se presta 3 dias
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAR_PRIMER_EJEMPLAR);
-        else if(tipoUsuario == "Estudiante"){
+        else if(tipoUsuario == "Estudiante")
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_ESTUDIANTE);
-            horaEntrega.setTime(horaDeCerrar);
-        }
-        else if(tipoUsuario == "Profesor" || tipoUsuario == "Estudiante y profesor"){
+        else if(tipoUsuario == "Profesor" || tipoUsuario == "Estudiante y profesor")
             horaEntrega = horaPrestamo.addDays(DIAS_PRESTAMO_MAESTRO);
-            horaEntrega.setTime(horaDeCerrar);
-        }
+
+        horaEntrega.setTime(horaDeCerrar);
 
         if(insertarRegistroPrestamo(codigoLibro, codigoCliente, codigoEmpleado, horaPrestamo, horaEntrega))
             mostrarInfoPrestamo(horaPrestamo, horaEntrega);

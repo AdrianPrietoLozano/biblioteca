@@ -5,8 +5,8 @@
 IGNORAR ESTO
 *
 *
-INSERT INTO usuario(nombre, telefono, departamento, carrera, grado, sexo, tipo)
-	VALUES('Adrian', '12345', 'alguno', 'inni', '4', 'H', 'E');
+INSERT INTO cliente(nombre, telefono, departamento, carrera, grado, sexo, tipo)
+	VALUES('Adrian', '12345', 'alguno', 'inni', null, 'H', 'E');
 
 
 INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo)

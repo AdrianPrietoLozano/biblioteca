@@ -76,6 +76,7 @@ void AltaCliente::procesarCliente(const QString &sentencia, const QString &mensa
 
             if(query.exec())
             {
+                qDebug() << query.executedQuery();
                 db.commit();
                 close();
             }

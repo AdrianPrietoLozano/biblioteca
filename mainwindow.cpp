@@ -292,8 +292,7 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    //estaATiempo()
-    if(true)
+    if(estaATiempo())
     {
         Prestamo *prestamo = new Prestamo(this, codigoEmpleadoActual);
         prestamo->exec();
@@ -335,8 +334,7 @@ QTime MainWindow::horaAbrir()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    //estaATiempo()
-    if(true)
+    if(estaATiempo())
     {
         Devolucion *devolucion = new Devolucion(this);
         devolucion->exec();
@@ -506,9 +504,7 @@ void MainWindow::on_botonMostrarClientes_clicked()
 
 void MainWindow::on_botonAgregarClientes_clicked()
 {
-    QString codigoCliente = ui->tableClientes->item(ui->tableClientes->currentRow(), 0)->text();
-
-    AltaCliente *ventana = new AltaCliente(this, codigoCliente, AltaCliente::INSERTAR,
+    AltaCliente *ventana = new AltaCliente(this, NULL, AltaCliente::INSERTAR,
                                            "Agregar cliente", "Agregar cliente");
     ventana->exec();
     delete ventana;
