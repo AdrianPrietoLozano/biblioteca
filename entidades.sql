@@ -285,6 +285,33 @@ INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) V
 	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 10, 2016);
 
 
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 1, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 2, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 3, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 4, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 5, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 6, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 7, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 8, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 9, 2014),
+	('978-607-32-2739-1', 'C++ Cómo programar', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 10, 2014);
+
+
+INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) VALUES
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 1, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 2, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 3, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 4, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 5, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 6, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 7, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 8, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 9, 2005),
+	('970-26-0637-3', 'Matemáticas discretas', 'Richard Johnsonbaugh', 'Pearson educación', 10, 2005);
+
+
+
 /*LIBROS*/
 /* Primer ejemplar */
 59, 21, 31, 41, 50, 68, 11, 78
@@ -320,4 +347,4 @@ INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_presta
 			(9, 22, 1, timestamp '2019-05-03 21:34:23', timestamp '2019-05-03 11:10:23'),
 			(8, 23, 1, timestamp '2019-05-04 21:34:23', timestamp '2019-05-04 15:10:23'),
 			(60, 29, 1, timestamp '2019-05-10 21:34:23', timestamp '2019-05-05 17:10:23'),
-			(61, 33, 1, timestamp '2019-05-10 21:34:23', timestamp '2019-05-06 14:10:23');
+			(61, 33, 1, timestamp '2019-05-10 21:34:23', timestamp '2019-05-06 12:07:00');

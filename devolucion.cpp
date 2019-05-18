@@ -214,11 +214,6 @@ QString Devolucion::calcularRetraso(const int ejemplar, const QDateTime fecha_en
     }
     else // no es primer ejemplar, se cobra por día
     {
-        qDebug() << "Hoy:     " << QDate::currentDate().toString();
-        qDebug() << "Entrega: " << fecha_entrega.date().toString();
-
-        qDebug() << "\n" << (fecha_entrega.secsTo(QDateTime::currentDateTime()) / 86400) << "\n jashdfjh";
-
         int diasRetraso = (fecha_entrega.secsTo(QDateTime::currentDateTime()) / 86400) + 1;
         if(diasRetraso < 0)
             diasRetraso = 0;
@@ -318,9 +313,6 @@ void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &ret
             painter.drawText(QRect(90, 1130, maxTam, 100), "Retraso: ");
             painter.drawText(QRect(90, 1230, maxTam, 100), "Penalización: ");
 
-            //QRect(100, 550, maxTam, 100)
-
-
             painter.setFont(QFont("times", 5));
 
             painter.drawText(QRect(1230, 400, maxTam, 200), query.value("titulo").toString());
@@ -334,7 +326,6 @@ void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &ret
             painter.drawText(QRect(1230, 1230, maxTam, 100), penalizacion);
 
             painter.end();
-
             return;
         }
     }
@@ -367,7 +358,7 @@ void Devolucion::on_botonAceptar_clicked()
     QString codigoLibro = ui->lineEditCodigoLibro->text();
     QString codigoCliente = ui->lineEditCodigoCliente->text();
 
-    if(QTime::currentTime() <= horaDeCerrar)
+    if(QTime::currentTime() <= horaDeCerrar) // si la no es hora de cerrar
     {
         QSqlQuery query(db);
 
@@ -390,7 +381,6 @@ void Devolucion::on_botonAceptar_clicked()
                     retraso = calcularRetraso(query.value("ejemplar").toInt(),
                                               query.value("fecha_entrega").toDateTime());
 
-                    // FALTA GENERAR RECIBO
                     // ¿Qué nombre se le pondrá la recibo?
                     generarRecibo(query.value("codigo").toString(), retraso, "$" + QString::number(penalizacion));
                 }
@@ -406,6 +396,8 @@ void Devolucion::on_botonAceptar_clicked()
             else
                 QMessageBox::critical(this, "Error", "No se encontró el préstamo");
         }
+        else
+            QMessageBox::critical(this, "Error", "No se pudo conectar a la base de datos");
     }
     else
         QMessageBox::information(this, "Fuera de tiempo", "No es posible realizar devoluciones");

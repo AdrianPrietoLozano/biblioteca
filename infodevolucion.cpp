@@ -15,7 +15,7 @@ InfoDevolucion::InfoDevolucion(QWidget *parent, const QString &titulo, const QSt
     ui->lineEditFechaOriginal->setText(fecha_entrega.toString("dddd dd MMM yyyy,  hh:mm ap"));
     ui->lineEditFechaEntrega->setText(QDateTime::currentDateTime().toString("dddd dd MMM yyyy,  hh:mm ap"));
     ui->lineEditRetraso->setText(retraso);
-    ui->lineEditPenalizacion->setText(QString::number(penalizacion));
+    ui->lineEditPenalizacion->setText("$" + QString::number(penalizacion));
 }
 
 InfoDevolucion::~InfoDevolucion()
