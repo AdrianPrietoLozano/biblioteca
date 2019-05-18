@@ -283,3 +283,41 @@ INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) V
 	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 8, 2016),
 	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 9, 2016),
 	('978-0-13-459632-7', 'C# for programmers', 'Paul Deitel, Harvey Deitel', 'Pearson educación', 10, 2016);
+
+
+/*LIBROS*/
+/* Primer ejemplar */
+59, 21, 31, 41, 50, 68, 11, 78
+
+/*otros*/
+10, 32, 9, 8, 60, 61, 62, 47, 48, 49, 51, 52, 53, ...
+
+/*------------------*/
+/*CLIENTES*/
+/*Estudiantes*/
+1, 4, 3, 12, 15, 1, 6, 17, ...
+
+/*Profesores*/
+22, 23, 21, 26, 27, 28
+
+/*Ambos*/
+29, 30, 31, 32, 33
+
+/*-------------------------*/
+
+
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (59, 1, 1, timestamp '2019-05-10 21:34:23', timestamp '2019-05-18 06:59:23'),
+			(21, 4, 13, timestamp '2019-02-10 21:34:23', timestamp '2019-05-18 12:45:23'),
+			(31, 22, 14, timestamp '2019-05-9 21:34:23', timestamp '2019-05-18 01:12:23'),
+			(41, 23, 15, timestamp '2019-05-8 21:34:23', timestamp '2019-05-17 02:07:23'),
+			(50, 33, 16, timestamp '2019-05-10 21:34:23', timestamp '2019-05-16 11:08:23'),
+			(68, 29, 17, timestamp '2019-05-10 21:34:23', timestamp '2019-05-18 13:10:23'),
+
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+			VALUES(10, 1, 1, timestamp '2019-05-01 21:34:23', timestamp '2019-05-01 11:10:23'),
+			(32, 4, 1, timestamp '2019-05-02 21:34:23', timestamp '2019-05-02 02:10:23'),
+			(9, 22, 1, timestamp '2019-05-03 21:34:23', timestamp '2019-05-03 11:10:23'),
+			(8, 23, 1, timestamp '2019-05-04 21:34:23', timestamp '2019-05-04 15:10:23'),
+			(60, 29, 1, timestamp '2019-05-10 21:34:23', timestamp '2019-05-05 17:10:23'),
+			(61, 33, 1, timestamp '2019-05-10 21:34:23', timestamp '2019-05-06 14:10:23');

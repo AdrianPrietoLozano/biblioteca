@@ -217,7 +217,9 @@ QString Devolucion::calcularRetraso(const int ejemplar, const QDateTime fecha_en
         qDebug() << "Hoy:     " << QDate::currentDate().toString();
         qDebug() << "Entrega: " << fecha_entrega.date().toString();
 
-        int diasRetraso = fecha_entrega.date().daysTo(QDate::currentDate()) + 1;
+        qDebug() << "\n" << (fecha_entrega.secsTo(QDateTime::currentDateTime()) / 86400) << "\n jashdfjh";
+
+        int diasRetraso = (fecha_entrega.secsTo(QDateTime::currentDateTime()) / 86400) + 1;
         if(diasRetraso < 0)
             diasRetraso = 0;
 
@@ -242,7 +244,7 @@ float Devolucion::calcularPenalizacion(const int ejemplar, const QDateTime fecha
     }
     else // no es primer ejemplar, se cobra por día
     {
-        int diasRetraso = fecha_entrega.date().daysTo(QDate::currentDate()) + 1;
+        int diasRetraso = (fecha_entrega.secsTo(QDateTime::currentDateTime()) / 86400) + 1;
         if(diasRetraso < 0)
             diasRetraso = 0;
 
