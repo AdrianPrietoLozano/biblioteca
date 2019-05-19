@@ -358,7 +358,8 @@ void Devolucion::on_botonAceptar_clicked()
     QString codigoLibro = ui->lineEditCodigoLibro->text();
     QString codigoCliente = ui->lineEditCodigoCliente->text();
 
-    if(QTime::currentTime() <= horaDeCerrar) // si la no es hora de cerrar
+    //QTime::currentTime() <= horaDeCerrar
+    if(true) // si la no es hora de cerrar
     {
         QSqlQuery query(db);
 

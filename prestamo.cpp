@@ -245,7 +245,8 @@ void Prestamo::mostrarInfoPrestamo(const QDateTime &horaPrestamo, const QDateTim
 
 void Prestamo::on_botonAceptar_clicked()
 {
-    if(QTime::currentTime() <= horaDeCerrar)
+    //QTime::currentTime() <= horaDeCerrar
+    if(true)
     {
         QString codigoLibro = ui->lineEditCodigoLibro->text();
         QString codigoCliente = ui->lineEditCodigoCliente->text();

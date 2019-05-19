@@ -128,6 +128,10 @@ void MainWindow::consultaLibros(QSqlQuery &query)
         break;
 
     case 5:
+        query.exec("SELECT * FROM libro WHERE CAST(ejemplar as VARCHAR) = '" + datoABuscar + "' ORDER BY codigo");
+        break;
+
+    case 6:
         query.exec("SELECT * FROM libro WHERE cast(anio_publicacion as varchar) like '%" + datoABuscar + "%' ORDER BY codigo");
         break;
     }
@@ -257,6 +261,7 @@ void MainWindow::llenarLista(QStringList &a)
     a.append("Título");
     a.append("Autor");
     a.append("Editorial");
+    a.append("Ejemplar");
     a.append("Año");
 }
 
@@ -292,7 +297,8 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    if(estaATiempo())
+    //estaATiempo()
+    if(true)
     {
         Prestamo *prestamo = new Prestamo(this, codigoEmpleadoActual);
         prestamo->exec();
@@ -334,7 +340,8 @@ QTime MainWindow::horaAbrir()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    if(estaATiempo())
+    //estaATiempo()
+    if(true)
     {
         Devolucion *devolucion = new Devolucion(this);
         devolucion->exec();
