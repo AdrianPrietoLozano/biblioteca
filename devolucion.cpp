@@ -270,7 +270,7 @@ bool Devolucion::eliminarPrestamo(const QString &codigoLibro, const QString &cod
     return false;
 }
 
-void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &retraso,
+QString Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &retraso,
                                const QString &penalizacion)
 {
     QString select = "SELECT L.titulo AS titulo, L.ejemplar AS ejemplar, C.nombre AS nombre, "\
@@ -289,21 +289,22 @@ void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &ret
 
         if(query.next())
         {
-            QPdfWriter pdf("C:/Users/abc/Desktop/Bases de datos/biblioteca/recibos/" + codigoPrestamo + ".pdf");
+            QString nombreRecibo = "C:/Users/abc/Desktop/Bases de datos/biblioteca/recibos/" + codigoPrestamo + ".pdf";
+            QPdfWriter pdf(nombreRecibo);
             //pdf.setPageSize(QPagedPaintDevice::);
-            pdf.setPageSizeMM(QSizeF(100, 100));
+            pdf.setPageSizeMM(QSizeF(47, 30));
             pdf.setPageMargins(QMargins(0, 0, 0, 0));
 
             QPainter painter(&pdf);
             QFont negritas = QFont("times", 5, QFont::Bold);
 
-            const int maxTam = 1500;
+            const int maxTam = 1000;
 
             painter.setPen(Qt::blue);
             painter.setFont(negritas);
-            painter.drawText(QRect(600, 70, maxTam, 100), "Biblioteca Héctor Prieto");
+            painter.drawText(QRect(630, 70, maxTam, 100), "Biblioteca Héctor Prieto");
             painter.setPen(Qt::black);
-            painter.drawText(QRect(400, 200, maxTam, 100), QDateTime::currentDateTime().toString("dddd, dd MMM yyyy,  hh:mm:ss"));
+            painter.drawText(QRect(700, 200, maxTam, 100), QDateTime::currentDateTime().toString("dddd, dd MMM yyyy,  hh:mm:ss"));
             painter.drawText(QRect(90, 400, maxTam, 100), "Título del libro: ");
             painter.drawText(QRect(90, 630, maxTam, 100), "Núm. ejemplar: ");
             painter.drawText(QRect(90, 730, maxTam, 100), "Nombre del cliente: ");
@@ -315,21 +316,24 @@ void Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &ret
 
             painter.setFont(QFont("times", 5));
 
-            painter.drawText(QRect(1230, 400, maxTam, 200), query.value("titulo").toString());
-            painter.drawText(QRect(1230, 630, maxTam, 100), query.value("ejemplar").toString());
-            painter.drawText(QRect(1230, 730, maxTam, 100), query.value("nombre").toString());
-            painter.drawText(QRect(1230, 830, maxTam, 100), query.value("tipo").toString());
-            painter.drawText(QRect(1230, 930, maxTam, 100), query.value("fecha_entrega").toDateTime().toString("dd-MM-yyyy,  hh:mm:ss"));
-            painter.drawText(QRect(1230, 1030, maxTam, 100), QDateTime::currentDateTime().toString("dd-MM-yyyy,  hh:mm:ss"));
-            painter.drawText(QRect(1230, 1130, maxTam, 100), retraso);
+            const int maxTamValores = 1200;
+
+            painter.drawText(QRect(1000, 400, maxTamValores, 200), query.value("titulo").toString());
+            painter.drawText(QRect(1000, 630, maxTamValores, 100), query.value("ejemplar").toString());
+            painter.drawText(QRect(1000, 730, maxTamValores, 100), query.value("nombre").toString());
+            painter.drawText(QRect(1000, 830, maxTamValores, 100), query.value("tipo").toString());
+            painter.drawText(QRect(1000, 930, maxTamValores, 100), query.value("fecha_entrega").toDateTime().toString("dd-MM-yyyy,  hh:mm:ss"));
+            painter.drawText(QRect(1000, 1030, maxTamValores, 100), QDateTime::currentDateTime().toString("dd-MM-yyyy,  hh:mm:ss"));
+            painter.drawText(QRect(1000, 1130, maxTamValores, 100), retraso);
             painter.setPen(Qt::red);
-            painter.drawText(QRect(1230, 1230, maxTam, 100), penalizacion);
+            painter.drawText(QRect(1000, 1230, maxTamValores, 100), penalizacion);
 
             painter.end();
-            return;
+            return nombreRecibo;
         }
     }
     QMessageBox::critical(this, "Error", "Ocurrio un error al crear el recibo");
+    return "";
 }
 
 
@@ -357,6 +361,7 @@ void Devolucion::on_botonAceptar_clicked()
     QString retraso = "Sin retraso";
     QString codigoLibro = ui->lineEditCodigoLibro->text();
     QString codigoCliente = ui->lineEditCodigoCliente->text();
+    QString nombreRecibo = "";
 
     //QTime::currentTime() <= horaDeCerrar
     if(true) // si la no es hora de cerrar
@@ -383,14 +388,14 @@ void Devolucion::on_botonAceptar_clicked()
                                               query.value("fecha_entrega").toDateTime());
 
                     // ¿Qué nombre se le pondrá la recibo?
-                    generarRecibo(query.value("codigo").toString(), retraso, "$" + QString::number(penalizacion));
+                    nombreRecibo = generarRecibo(query.value("codigo").toString(), retraso, "$" + QString::number(penalizacion));
                 }
 
                 eliminarPrestamo(codigoLibro, codigoCliente);
                 InfoDevolucion *infoDevolucion = new InfoDevolucion(this, ui->lineEditTitulo->text(),
                                                                     ui->lineEditNombre->text(),
                                                                     query.value("fecha_entrega").toDateTime(),
-                                                                    retraso, penalizacion);
+                                                                    retraso, penalizacion, nombreRecibo);
                 infoDevolucion->exec();
                 delete infoDevolucion;
             }

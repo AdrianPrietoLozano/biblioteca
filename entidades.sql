@@ -319,6 +319,40 @@ INSERT INTO libro (isbn, titulo, autor, editorial, ejemplar, anio_publicacion) V
 
 
 
+-- PRIMER EJEMPLAR
+-- 3 préstamos de primer ejemplar a profesores con retraso hechos el viernes
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (127, 21, 1, timestamp '2019-05-03 13:34:01', timestamp '2019-05-17 17:00:00'),
+			(59, 26, 15, timestamp '2019-05-03 15:13:23', timestamp '2019-05-17 17:00:00'),
+			(21, 22, 17, timestamp '2019-05-10 16:01:23', timestamp '2019-05-24 17:00:00');
+
+-- 1 préstamo a estudiante con restraso
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (41, 3, 14, timestamp '2019-05-10 14:03:20', timestamp '2019-05-17 17:00:00');
+
+-- 2 préstamos a AMBOS sin retraso
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (50, 30, 12, timestamp '2019-05-17 11:05:00', timestamp '2019-05-31 17:00:00'),
+			(157, 29, 21, timestamp '2019-05-17 09:03:20', timestamp '2019-05-31 17:00:00');
+
+
+-- OTROS LIBROS
+-- 2 préstamos a estudiantes con retraso uno de ellos hecho el sábado
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (9, 4, 17, timestamp '2019-05-11 13:00:20', timestamp '2019-05-18 14:00:00'),
+			(8, 19, 12, timestamp '2019-05-06 14:13:00', timestamp '2019-05-13 17:00:00');
+
+-- 1 préstamo a AMBOS sin restraso
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (10, 33, 15, timestamp '2019-05-17 14:03:20', timestamp '2019-05-31 17:00:00');
+
+-- 2 préstamo a profesor con retraso
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (22, 22, 19, timestamp '2019-05-08 16:15:50', timestamp '2019-05-15 17:00:00'),
+			(23, 23, 17, timestamp '2019-05-09 13:05:40', timestamp '2019-05-16 17:00:00');
+
+
+
 
 /*
 *
@@ -331,6 +365,9 @@ IGNORAR ESTO
 *
 *
 *
+---------------------------
+INSERT INTO prestamo(codigo_libro, codigo_cliente, codigo_empleado, fecha_prestamo, fecha_entrega)
+	VALUES (60, 17, 15, timestamp '2019-05-08 14:03:20', timestamp '2019-05-15 17:00:00');
 ---------------------------------------------------------
 
 SELECT codigo, nombre, nombre_usuario, PGP_SYM_DECRYPT(contrasenia, 'equipo7'),

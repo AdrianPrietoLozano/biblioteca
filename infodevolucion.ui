@@ -274,7 +274,30 @@
     <string>Aceptar</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="botonVerRecibo">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>350</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ver recibo</string>
+   </property>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>botonVerRecibo</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>lineEditTituloLibro</tabstop>
+  <tabstop>lineEditNombreCliente</tabstop>
+  <tabstop>lineEditFechaOriginal</tabstop>
+  <tabstop>lineEditFechaEntrega</tabstop>
+  <tabstop>lineEditRetraso</tabstop>
+  <tabstop>lineEditPenalizacion</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
