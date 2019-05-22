@@ -26,6 +26,7 @@ private:
     QSqlDatabase db;
 
     bool insertarEmpleado();
+    bool verificarCampos();
 };
 
 #endif // ALTAEMPLEADO_H

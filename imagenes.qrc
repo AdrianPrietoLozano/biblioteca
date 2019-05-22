@@ -8,5 +8,7 @@
         <file>imagenes/estante_libros.jpg</file>
         <file>imagenes/editar.png</file>
         <file>imagenes/eliminar.png</file>
+        <file>imagenes/estante.png</file>
+        <file>imagenes/estante3.jpg</file>
     </qresource>
 </RCC>

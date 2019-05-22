@@ -26,25 +26,29 @@ void nuevo_libro::on_botonFinalizar_clicked()
 {
     if(db.open())
     {
-        QSqlQuery query(db);
+        if(verificarCampos())
+        {
+            QSqlQuery query(db);
 
-        QString select = "SELECT * FROM libro WHERE isbn=? AND titulo=? AND ejemplar=?";
-        query.prepare(select);
-        query.bindValue(0, ui->lineEditIsbn->text());
-        query.bindValue(1, ui->lineEditTitulo->text());
-        query.bindValue(2, ui->spinBoxEjemplar->value());
-        query.exec();
+            QString select = "SELECT * FROM libro WHERE isbn=? AND ejemplar=?";
+            query.prepare(select);
+            query.bindValue(0, ui->lineEditIsbn->text());
+            query.bindValue(1, ui->spinBoxEjemplar->value());
+            query.exec();
 
-        if(query.next()) // si ya existe el libro
-            QMessageBox::critical(this, "Error", "Error: el libro ya existe");
+            if(query.next()) // si ya existe el libro
+                QMessageBox::critical(this, "Error", "Error: el libro ya existe");
+            else
+                if(insertarLibro())
+                    close();
+                else
+                    QMessageBox::critical(this, "Error", "Ocurrio un error al insertar el libro");
+        }
         else
-            if(!insertarLibro())
-                QMessageBox::critical(this, "Error", "Ocurrio un error al insertar el libro");
+            QMessageBox::critical(this, "Campos vacíos", "Los campos ISBN, título y ejemplar son obligatorios");
     }
     else
         qDebug() << "Error: no se pudo acceder a la base de datos.";
-
-    close();
 }
 
 bool nuevo_libro::insertarLibro()
@@ -72,4 +76,14 @@ bool nuevo_libro::insertarLibro()
     }
 
     return false;
+}
+
+bool nuevo_libro::verificarCampos()
+{
+    if(ui->lineEditIsbn->text() == "" ||
+            ui->lineEditTitulo->text() == "")
+        return false;
+
+   return true;
+
 }

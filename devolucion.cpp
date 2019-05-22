@@ -289,7 +289,7 @@ QString Devolucion::generarRecibo(const QString &codigoPrestamo, const QString &
 
         if(query.next())
         {
-            QString nombreRecibo = "C:/Users/abc/Desktop/Bases de datos/biblioteca/recibos/" + codigoPrestamo + ".pdf";
+            QString nombreRecibo = "C:/Users/abc/3D Objects/biblioteca-master/recibos/" + codigoPrestamo + ".pdf";
             QPdfWriter pdf(nombreRecibo);
             //pdf.setPageSize(QPagedPaintDevice::);
             pdf.setPageSizeMM(QSizeF(47, 30));
@@ -363,8 +363,7 @@ void Devolucion::on_botonAceptar_clicked()
     QString codigoCliente = ui->lineEditCodigoCliente->text();
     QString nombreRecibo = "";
 
-    //QTime::currentTime() <= horaDeCerrar
-    if(true) // si la no es hora de cerrar
+    if(QTime::currentTime() <= horaDeCerrar)
     {
         QSqlQuery query(db);
 

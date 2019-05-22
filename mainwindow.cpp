@@ -49,6 +49,10 @@ MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador
     connect(ui->tableClientes, SIGNAL(cellPressed(int,int)),
             this, SLOT(mostrarMenuCliente()));
 
+    connect(ui->tableLibros, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(menuLibros()));
+
+    ui->pushButton_4->setVisible(false);
+
 }
 
 void MainWindow::llenarTabla(QTableWidget *tabla, const QString &datoABuscar,
@@ -290,15 +294,14 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_4_clicked()
 {
-    Modificar *mod = new Modificar(this);
-    mod->exec();
-    delete mod;
+//    Modificar *mod = new Modificar(this);
+//    mod->exec();
+//    delete mod;
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    //estaATiempo()
-    if(true)
+    if(estaATiempo())
     {
         Prestamo *prestamo = new Prestamo(this, codigoEmpleadoActual);
         prestamo->exec();
@@ -340,8 +343,7 @@ QTime MainWindow::horaAbrir()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    //estaATiempo()
-    if(true)
+    if(estaATiempo())
     {
         Devolucion *devolucion = new Devolucion(this);
         devolucion->exec();
@@ -523,12 +525,23 @@ void MainWindow::modificarCliente()
 {
     QString codigoCliente = ui->tableClientes->item(ui->tableClientes->currentRow(), 0)->text();
 
-    AltaCliente *ventanaModificar = new AltaCliente(this, codigoCliente, AltaCliente::MODIFICAR,
-                                                    "Modificar cliente", "Modificar cliente");
-    ventanaModificar->exec();
-    delete ventanaModificar;
+    if(db.open())
+    {
+        QSqlQuery query(db);
+        query.exec("SELECT * FROM prestamo WHERE codigo_cliente = " + codigoCliente);
 
-    on_botonMostrarClientes_clicked();
+        if(query.next()) // si el cliente tiene prestamos
+            QMessageBox::critical(this, "Error", "El cliente no se puede modificar porque solicitó libros");
+        else
+        {
+            AltaCliente *ventanaModificar = new AltaCliente(this, codigoCliente, AltaCliente::MODIFICAR,
+                                                            "Modificar cliente", "Modificar cliente");
+            ventanaModificar->exec();
+            delete ventanaModificar;
+
+            on_botonMostrarClientes_clicked();
+        }
+    }
 }
 
 
@@ -555,3 +568,89 @@ void MainWindow::on_botonMostrarPrestamos_clicked()
 
     llenarTabla(ui->tablePrestamos, ui->lineBuscarPrestamo->text(), query, NUM_COLUMNAS_PRESTAMO);
 }
+
+void MainWindow::menuLibros()
+{
+    QMenu libro(tr("Opciones"));
+
+    QAction editar(QIcon(":/imagenes/editar.png"), "Modificar", this);
+    QAction eliminar(QIcon(":/imagenes/eliminar.png"), "Eliminar", this);
+
+    connect(&editar, SIGNAL(triggered(bool)), this, SLOT(modificarLibro()));
+    connect(&eliminar, SIGNAL(triggered(bool)), this, SLOT(eliminarLibro()));
+
+    libro.addAction(&editar);
+    libro.addAction(&eliminar);
+
+    libro.exec(QCursor::pos());
+}
+
+void MainWindow::modificarLibro()
+{
+    QString codigoLibro = ui->tableLibros->item(ui->tableLibros->currentRow(), 0)->text();
+
+    qDebug() << codigoLibro;
+
+    QSqlDatabase db = QSqlDatabase::database("coneccion");
+
+    QSqlQuery query(db);
+
+    query.exec("SELECT * FROM prestamo WHERE codigo_libro = " + codigoLibro);
+
+    query.next();
+
+    if(!(query.isValid()))
+    {
+        qDebug() << "Modificar";
+
+        Modificar *m = new Modificar(this);
+
+        m->setCodigoLibro(codigoLibro);
+        m->setTabla(ui->tableLibros);
+        m->llenarInterfaz();
+        m->setModal(true);
+        m->show();
+        ui->line_Buscar->clear();
+    }
+    else
+    {
+        QMessageBox::critical(this, "Libro en prestamo", "Este libro no se puede modificar.", QMessageBox::Ok   );
+    }
+}
+
+void MainWindow::eliminarLibro()
+{
+    qDebug() << "Eliminar";
+
+    QString codigoLibro = ui->tableLibros->item(ui->tableLibros->currentRow(), 0)->text();
+
+    qDebug() << codigoLibro;
+
+    QSqlDatabase db = QSqlDatabase::database("coneccion");
+
+    QSqlQuery query(db);
+
+    query.exec("SELECT * FROM prestamo WHERE codigo_libro = " + codigoLibro);
+
+    query.next();
+
+    if(!(query.isValid()))
+    {
+        int res = QMessageBox::question(this, "Eliminar", "¿Eliminar el libro?", QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+
+        if(res == QMessageBox::Ok)
+        {
+            query.exec("DELETE FROM libro WHERE codigo = " + codigoLibro);
+
+            on_pushButton_2_clicked();
+
+            QMessageBox::information(this, "Eliminado", "Libro eliminado.", QMessageBox::Ok);
+        }
+
+    }
+    else
+    {
+        QMessageBox::critical(this, "Libro en prestamo", "Este libro no se puede eliminar.", QMessageBox::Ok);
+    }
+}
+

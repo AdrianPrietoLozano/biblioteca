@@ -41,7 +41,11 @@ private slots:
     void on_botonAgregarClientes_clicked();
     void on_botonMostrarPrestamos_clicked();
 
-private:
+    void menuLibros();
+    void modificarLibro();
+    void eliminarLibro();
+
+    private:
 
     QString getSeleccionPrestamos();
     QString getSeleccionEmpleados();

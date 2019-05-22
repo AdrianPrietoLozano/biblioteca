@@ -28,32 +28,37 @@ void ModificarEmpleado::on_buttonBox_accepted()
     {
         if(db.open())
         {
-            QSqlQuery query(db);
-            QString update = "UPDATE empleado SET nombre=?, nombre_usuario=?, contrasenia=PGP_SYM_ENCRYPT(?, 'equipo7'), "
-                             "edad=?, salario=?, sexo=?, es_administrador=FALSE WHERE codigo=?";
-
-            query.prepare(update);
-
-            if(ui->radioButtonHombre->isChecked())
-                sexo = "H";
-            else
-                sexo = "M";
-
-            query.bindValue(0, ui->lineEditNombre->text());
-            query.bindValue(1, ui->lineEditUsuario->text());
-            query.bindValue(2, ui->lineEditContrasenia->text());
-            query.bindValue(3, ui->spinBoxEdad->value());
-            query.bindValue(4, ui->doubleSpinBoxSalario->value());
-            query.bindValue(5, sexo);
-            query.bindValue(6, ui->lineEditCodigo->text());
-
-            if(query.exec())
+            if(verificarCampos())
             {
-                db.commit();
-                close();
+                QSqlQuery query(db);
+                QString update = "UPDATE empleado SET nombre=?, nombre_usuario=?, contrasenia=PGP_SYM_ENCRYPT(?, 'equipo7'), "
+                                 "edad=?, salario=?, sexo=?, es_administrador=FALSE WHERE codigo=?";
+
+                query.prepare(update);
+
+                if(ui->radioButtonHombre->isChecked())
+                    sexo = "H";
+                else
+                    sexo = "M";
+
+                query.bindValue(0, ui->lineEditNombre->text());
+                query.bindValue(1, ui->lineEditUsuario->text());
+                query.bindValue(2, ui->lineEditContrasenia->text());
+                query.bindValue(3, ui->spinBoxEdad->value());
+                query.bindValue(4, ui->doubleSpinBoxSalario->value());
+                query.bindValue(5, sexo);
+                query.bindValue(6, ui->lineEditCodigo->text());
+
+                if(query.exec())
+                {
+                    db.commit();
+                    close();
+                }
+                else
+                    QMessageBox::critical(this, "Error", "Ocurrio un error al modificar el empleado");
             }
             else
-                QMessageBox::critical(this, "Error", "Ocurrio un error al modificar el empleado");
+                QMessageBox::critical(this, "Campos vacíos", "Los campos nombre, nombre de usuario y contraseña son obligatorios");
         }
     }
 }
@@ -108,5 +113,15 @@ bool ModificarEmpleado::existeEmpleado()
         if(!query.next()) //si no existe el empleado
             return false;
     }
+    return true;
+}
+
+bool ModificarEmpleado::verificarCampos()
+{
+    if(ui->lineEditNombre->text() == "" ||
+            ui->lineEditUsuario->text() == "" ||
+            ui->lineEditContrasenia->text() == "")
+        return false;
+
     return true;
 }

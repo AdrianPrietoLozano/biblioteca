@@ -23,23 +23,28 @@ void AltaEmpleado::on_pushButtonAceptar_clicked()
 
     if(db.open())
     {
-        QString select = "SELECT * FROM empleado WHERE nombre_usuario=?";
-        query.prepare(select);
-        query.bindValue(0, ui->lineEditUsuario->text());
-        query.exec();
-
-        if(query.next()) // ya existe el empleado
-            QMessageBox::critical(this, "Error", "Ya existe un empleado con ese nombre de usuario");
-        else
+        if(verificarCampos())
         {
-            if(ui->lineEditContrasenia->text() == ui->lineEditRepiteContrasenia->text()) // las contr. coinciden
-                if(insertarEmpleado())
-                    close();
-                else
-                    QMessageBox::critical(this, "Error", "Ocurrio algún error al insertar el empleado");
+            QString select = "SELECT * FROM empleado WHERE nombre_usuario=?";
+            query.prepare(select);
+            query.bindValue(0, ui->lineEditUsuario->text());
+            query.exec();
+
+            if(query.next()) // ya existe el empleado
+                QMessageBox::critical(this, "Error", "Ya existe un empleado con ese nombre de usuario");
             else
-                QMessageBox::critical(this, "Error", "Error: la contraseña no coincide");
+            {
+                if(ui->lineEditContrasenia->text() == ui->lineEditRepiteContrasenia->text()) // las contr. coinciden
+                    if(insertarEmpleado())
+                        close();
+                    else
+                        QMessageBox::critical(this, "Error", "Ocurrio algún error al insertar el empleado");
+                else
+                    QMessageBox::critical(this, "Error", "Error: la contraseña no coincide");
+            }
         }
+        else
+            QMessageBox::critical(this, "Campos vacíos", "Los campos nombre, nombre de usuario y contraseña son obligatorios");
     }
 }
 
@@ -72,6 +77,16 @@ bool AltaEmpleado::insertarEmpleado()
     }
 
     return false;
+}
+
+bool AltaEmpleado::verificarCampos()
+{
+    if(ui->lineEditNombre->text() == "" ||
+            ui->lineEditUsuario->text() == "" ||
+            ui->lineEditContrasenia->text() == "")
+        return false;
+
+    return true;
 }
 
 void AltaEmpleado::on_pushButtonCancelar_clicked()

@@ -27,6 +27,7 @@ private:
     QSqlDatabase db;
 
     bool insertarLibro();
+    bool verificarCampos();
 };
 
 #endif // NUEVO_LIBRO_H

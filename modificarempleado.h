@@ -27,6 +27,7 @@ private:
 
     void llenarCampos(const QString &codigoEmpleado);
     bool existeEmpleado();
+    bool verificarCampos();
 };
 
 #endif // MODIFICAREMPLEADO_H
