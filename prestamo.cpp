@@ -13,10 +13,10 @@
 
 Prestamo::Prestamo(QWidget *parent, const QString &codigoEmpleado) :
     QDialog(parent),
-    codigoEmpleado(codigoEmpleado),
     ui(new Ui::Prestamo)
 {
     ui->setupUi(this);
+    this->codigoEmpleado = codigoEmpleado;
     db = QSqlDatabase::database("coneccion");
 }
 

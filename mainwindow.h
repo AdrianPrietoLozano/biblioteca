@@ -86,7 +86,7 @@ private slots:
                                         "WHEN tipo='A' THEN 'Ambos' "\
                                     "END AS tipo FROM cliente) AS temporal ";
 
-    QString seleccionPrestamos = "SELECT codigo, titulo, nombre_cliente, nombre_empleado, "\
+    QString seleccionPrestamos = "SELECT codigo, codigo_libro, titulo, codigo_cliente, nombre_cliente, nombre_empleado, "\
                         "to_char(fecha_prestamo, 'dd-mm-yyyy,  hh24:mi AM'), "\
                         "to_char(fecha_entrega, 'dd-mm-yyyy,  hh24:mi AM'), "\
                         "CASE WHEN ejemplar = 1 THEN CONCAT(TRUNC(retraso / 3600), ' horas') "\
@@ -95,11 +95,9 @@ private slots:
                         "CASE WHEN ejemplar = 1 THEN CONCAT('$', TRUNC(retraso / 3600) * 1) "\
                              "WHEN ejemplar <> 1 THEN CONCAT('$', TRUNC(retraso / 86400) * 5) "\
                         "END AS penalizacion2 "\
-
                         "FROM "\
-
-                    "(SELECT prestamo.codigo, titulo, cliente.nombre AS nombre_cliente, empleado.nombre AS nombre_empleado, "\
-                        "fecha_prestamo, fecha_entrega, ejemplar, "\
+                    "(SELECT prestamo.codigo, codigo_libro, titulo, codigo_cliente, cliente.nombre AS nombre_cliente, "\
+                        "empleado.nombre AS nombre_empleado, fecha_prestamo, fecha_entrega, ejemplar, "\
                         "CASE "\
                             "WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) <= 0 THEN 0 "\
                             "WHEN ejemplar = 1 AND EXTRACT( EPOCH from now() - fecha_entrega ) > 0 "\

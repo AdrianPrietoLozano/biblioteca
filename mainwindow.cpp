@@ -12,7 +12,7 @@
 #define NUM_COLUMNAS_LIBRO 7
 #define NUM_COLUMNAS_EMPLEADO 7
 #define NUM_COLUMNAS_CLIENTE 8
-#define NUM_COLUMNAS_PRESTAMO 8
+#define NUM_COLUMNAS_PRESTAMO 10
 
 MainWindow::MainWindow(const QString &codigoEmpleado, const bool esAdministrador, QWidget *parent) :
     QMainWindow(parent),

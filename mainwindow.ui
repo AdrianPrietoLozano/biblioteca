@@ -40,7 +40,7 @@ background: none;
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -721,7 +721,7 @@ border-radius: 8px;</string>
           </column>
           <column>
            <property name="text">
-            <string>Libro</string>
+            <string>Código libro</string>
            </property>
            <property name="font">
             <font>
@@ -733,7 +733,31 @@ border-radius: 8px;</string>
           </column>
           <column>
            <property name="text">
-            <string>Cliente</string>
+            <string>Título libro</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Código cliente</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Nombre cliente</string>
            </property>
            <property name="font">
             <font>

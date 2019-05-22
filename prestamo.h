@@ -23,11 +23,8 @@ public:
 
 private slots:
     void on_botonCancelar_clicked();
-
     void on_lineEditCodigoLibro_textEdited(const QString &arg1);
-
     void on_lineEditCodigoCliente_textEdited(const QString &arg1);
-
     void on_botonAceptar_clicked();
 
 private:
